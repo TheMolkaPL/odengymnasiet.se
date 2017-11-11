@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<application>
+    <http host="127.0.0.1" port="4567">
+        <max-threads>-1</max-threads>
+        <min-threads>-1</min-threads>
+        <idle-timeout>-1</idle-timeout>
+    </http>
+</application>
