@@ -1,7 +1,7 @@
 <div class="jumbotron jumbotron-fluid">
     <div class="container">
         <header>
-            <h2>${program.title}</h2>
+            <h2>För elever</h2>
         </header>
     </div>
 </div>

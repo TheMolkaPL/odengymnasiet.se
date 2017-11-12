@@ -1,13 +1,16 @@
-package controllers.admin;
+package se.odengymnasiet.controller.admin;
 
-import se.odengymnasiet.Controller;
+import se.odengymnasiet.Application;
+import se.odengymnasiet.controller.Controller;
 import se.odengymnasiet.route.Route;
 import spark.Request;
 import spark.Response;
 
 public class AdminController extends Controller {
-    public AdminController(Request request, Response response) {
-        super(request, response);
+    public AdminController(Application application,
+                           Request request,
+                           Response response) {
+        super(application, request, response);
     }
 
     @Route("/")

@@ -3,5 +3,6 @@
     <route class="IndexController">
         <route class="admin.AdminController" path="/admin" />
         <route class="ProgramsController" path="/programs" />
+        <route class="StudentsController" path="/students" />
     </route>
 </routes>

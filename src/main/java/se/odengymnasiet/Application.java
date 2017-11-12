@@ -1,7 +1,7 @@
+package se.odengymnasiet;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import se.odengymnasiet.Configuration;
-import se.odengymnasiet.SleepForeverThread;
 import se.odengymnasiet.route.RequestMethod;
 import se.odengymnasiet.route.RouteManager;
 import spark.Request;
@@ -56,14 +56,30 @@ public final class Application {
         this.routes.readFile();
 
         Service http = this.getService()
-                .ipAddress("localhost")
-                .port(4567)
-                .threadPool(-1, -1, -1);
+                .ipAddress(this.configuration.httpHost())
+                .port(this.configuration.httpPort())
+                .threadPool(this.configuration.httpMaxThreads(),
+                            this.configuration.httpMinThreads(),
+                            this.configuration.httpIdleTimeout());
 
-        http.staticFiles.location(PUBLIC_ASSETS_PATH);
+        String assetsPath = this.configuration.httpAssetsPath();
+        if (assetsPath != null) {
+            http.externalStaticFileLocation(assetsPath);
+        } else {
+            http.staticFileLocation(PUBLIC_ASSETS_PATH);
+        }
+
         http.initExceptionHandler((e) -> {
             this.logger.error("Exception caught: " + e.getMessage(), e);
             System.exit(-1);
+        });
+
+        http.notFound((request, response) -> {
+            return response.status();
+        });
+
+        http.internalServerError((request, response) -> {
+            return response.status();
         });
 
         http.init();
@@ -121,11 +137,13 @@ public final class Application {
     public Route route(Method method) {
         try {
             Constructor<?> constructor = method.getDeclaringClass()
-                    .getConstructor(Request.class, Response.class);
+                    .getConstructor(Application.class,
+                                    Request.class,
+                                    Response.class);
             constructor.setAccessible(true);
 
             return (request, response) -> {
-                Object obj = constructor.newInstance(request, response);
+                Object obj = constructor.newInstance(this, request, response);
 
                 method.setAccessible(true);
                 return method.invoke(obj);

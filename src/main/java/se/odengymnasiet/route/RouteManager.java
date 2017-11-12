@@ -4,8 +4,8 @@ import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
+import se.odengymnasiet.controller.Controller;
 
-import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.LinkedHashMap;
@@ -47,8 +47,8 @@ public class RouteManager {
         Document document;
         SAXBuilder builder = new SAXBuilder();
         try {
-            File file = new File(ROUTES_FILE_PATH);
-            document = builder.build(file);
+            document = builder.build(this.getClass().getClassLoader()
+                    .getResourceAsStream(ROUTES_FILE_PATH));
         } catch (JDOMException | IOException e) {
             e.printStackTrace();
             return;
@@ -72,7 +72,8 @@ public class RouteManager {
 
     private XMLRoute readRouteControllers(Element xml) {
         try {
-            String clazz = "controllers." + xml.getAttributeValue("class");
+            String clazz = Controller.class.getPackage().getName() +
+                    "." + xml.getAttributeValue("class");
 
             XMLRoute route = new XMLRoute();
             route.clazz = Class.forName(clazz);
