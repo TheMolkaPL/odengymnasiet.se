@@ -1,7 +1,7 @@
-package se.odengymnasiet.controller.admin;
+package se.odengymnasiet.admin;
 
 import se.odengymnasiet.Application;
-import se.odengymnasiet.controller.Controller;
+import se.odengymnasiet.Controller;
 import se.odengymnasiet.route.Route;
 import spark.Request;
 import spark.Response;

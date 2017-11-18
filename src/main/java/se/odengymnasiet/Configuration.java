@@ -46,6 +46,12 @@ public class Configuration {
                 this.httpAssetsPath(http.getChildText("assets-path"));
             }
             {
+                Element database = root.getChild("database");
+                if (database != null) {
+                    this.database(database);
+                }
+            }
+            {
                 Element views = root.getChild("views");
                 if (views != null) {
                     this.viewsPath(views.getAttributeValue("path"));
@@ -102,6 +108,14 @@ public class Configuration {
     }
     public void httpAssetsPath(String httpAssetsPath) {
         this.httpAssetsPath = httpAssetsPath;
+    }
+
+    private Element database;
+    public Element database() {
+        return this.database;
+    }
+    public void database(Element database) {
+        this.database = database;
     }
 
     private String viewsPath;

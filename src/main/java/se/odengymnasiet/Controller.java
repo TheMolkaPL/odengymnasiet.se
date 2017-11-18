@@ -1,8 +1,6 @@
-package se.odengymnasiet.controller;
+package se.odengymnasiet;
 
 import freemarker.template.Configuration;
-import se.odengymnasiet.Application;
-import se.odengymnasiet.Attributes;
 import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
@@ -70,9 +68,15 @@ public abstract class Controller {
             layout = "application";
         }
 
+        String appNav = this.getRequest().pathInfo().split("/", 3)[1];
+        if (appNav.isEmpty()) {
+            appNav = "index";
+        }
+
         Attributes layoutAttributes = Attributes.create()
                 .add("title", title)
-                .add("body", this.render(view, attributes).trim());
+                .add("body", this.render(view, attributes).trim())
+                .add("app_nav", appNav.toLowerCase());
 
         return this.render(LAYOUTS_DIRECTORY + "/" + layout, layoutAttributes);
     }

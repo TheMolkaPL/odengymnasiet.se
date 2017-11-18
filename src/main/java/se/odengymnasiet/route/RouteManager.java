@@ -4,7 +4,6 @@ import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
-import se.odengymnasiet.controller.Controller;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -72,11 +71,8 @@ public class RouteManager {
 
     private XMLRoute readRouteControllers(Element xml) {
         try {
-            String clazz = Controller.class.getPackage().getName() +
-                    "." + xml.getAttributeValue("class");
-
             XMLRoute route = new XMLRoute();
-            route.clazz = Class.forName(clazz);
+            route.clazz = Class.forName(xml.getAttributeValue("class"));
             route.setPath(xml.getAttributeValue("path"));
 
             xml.getChildren("route").forEach(element -> {

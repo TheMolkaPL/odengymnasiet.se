@@ -26,15 +26,15 @@
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav mr-auto">
                             <li class="nav-item">
-                                <a class="nav-link" href="/about">Om skolan</a>
+                                <a class="nav-link <#if app_nav == "about">active</#if>" href="/about">Om skolan</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="/programs">Våra utbildningar</a>
+                                <a class="nav-link <#if app_nav == "programs">active</#if>" href="/programs">Våra utbildningar</a>
                             </li>
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="/students" id="navbarStudentsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">För elever</a>
+                                <a class="nav-link dropdown-toggle <#if app_nav == "students">active</#if>" href="/students" id="navbarStudentsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">För elever</a>
                                 <div class="dropdown-menu" aria-labelledby="navbarStudentsDropdown">
-                                    <a class="dropdown-item" href="https://facebook.com/odenplansgym" target="_blank" rel="noopener">Facebook</a>
+                                    <a class="dropdown-item" href="https://facebook.com/odengymnasiet" target="_blank" rel="noopener">Facebook</a>
                                     <a class="dropdown-item" href="https://sms.schoolsoft.se/aprendere" target="_blank" rel="noopener">SchoolSoft</a>
                                     <a class="dropdown-item" href="https://mail.aprendere.se" target="_blank" rel="noopener">E-post</a>
                                     <div class="dropdown-divider"></div>
@@ -42,7 +42,7 @@
                                 </div>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="/contact">Kontakt</a>
+                                <a class="nav-link <#if app_nav == "contact">active</#if>" href="/contact">Kontakt</a>
                             </li>
                         </ul>
                     </div>
@@ -54,12 +54,17 @@
             ${body}
         </main>
 
-        <footer style="padding-bottom: 16px;">
-            <div class="container">
+        <footer style="margin-top: 36px;">
+            <div class="container" style="margin-bottom: 16px;">
                 <hr>
-                <ul class="nav">
+                <ul class="nav float-left">
                     <li class="nav-item">
-                        <a class="nav-link" href="http://themolka.pl">Copyright &copy; 2017 Aleksander Jagiełło</a>
+                        <a class="nav-link" href="http://themolka.pl" target="_blank" rel="noopener">Copyright &copy; 2017 Aleksander Jagiełło</a>
+                    </li>
+                </ul>
+                <ul class="nav float-right">
+                    <li class="nav-item">
+                        <a class="nav-link" href="https://aprendereskolor.se" target="_blank" rel="noopener">Aprendere Skolor</a>
                     </li>
                 </ul>
             </div>

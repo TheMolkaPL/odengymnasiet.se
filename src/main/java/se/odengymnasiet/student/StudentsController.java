@@ -1,7 +1,8 @@
-package se.odengymnasiet.controller;
+package se.odengymnasiet.student;
 
 import se.odengymnasiet.Application;
 import se.odengymnasiet.Attributes;
+import se.odengymnasiet.Controller;
 import se.odengymnasiet.route.Route;
 import spark.Request;
 import spark.Response;

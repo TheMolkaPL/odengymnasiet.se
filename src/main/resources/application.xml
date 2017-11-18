@@ -5,4 +5,11 @@
         <min-threads>-1</min-threads>
         <idle-timeout>-1</idle-timeout>
     </http>
+
+    <database factory="se.odengymnasiet.mongo.MongoDatabaseFactory">
+        <server host="127.0.0.1" port="27017" />
+        <database>odengymnasiet</database>
+        <username>username</username>
+        <password>password</password>
+    </database>
 </application>

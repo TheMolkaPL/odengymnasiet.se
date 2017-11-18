@@ -21,6 +21,7 @@
                                 <h6 class="card-subtitle text-muted" title="${program.title} är ett högskoleförberedande program som förbereder dig för fortsatta studier på högskola och universitet.">${program.subtitle?lower_case}</h6>
                             </#if>
                         </div>
+
                         <a href="/programs/${program.path}" title="Mer om ${program.title?lower_case}">
                             <img class="card-img-bottom" src="${program.icon}" alt="${program.title}">
                         </a>
