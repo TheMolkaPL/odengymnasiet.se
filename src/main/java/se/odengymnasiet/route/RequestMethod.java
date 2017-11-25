@@ -7,6 +7,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 public enum RequestMethod {
+
     GET(http -> path -> route -> http.get(path, route)),
     POST(http -> path -> route -> http.post(path, route)),
     PUT(http -> path -> route -> http.put(path, route)),

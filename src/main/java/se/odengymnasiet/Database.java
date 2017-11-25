@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import java.util.function.Consumer;
 
 public class Database {
+
     private final Application application;
     private final Logger logger;
 

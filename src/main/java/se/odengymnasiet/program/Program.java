@@ -5,6 +5,7 @@ import org.bson.types.ObjectId;
 import se.odengymnasiet.mongo.Model;
 
 public class Program extends Model implements Comparable<Program> {
+
     public static final String FIELD_TITLE = "title";
     public static final String FIELD_SUBTITLE = "subtitle";
     public static final String FIELD_PATH = "path";
@@ -33,7 +34,7 @@ public class Program extends Model implements Comparable<Program> {
 
     @Override
     public int compareTo(Program o) {
-        int compare = Integer.compare(o.getPriority(), this.getPriority());
+        int compare = Integer.compare(this.getPriority(), o.getPriority());
         if (compare != 0) {
             return compare;
         }

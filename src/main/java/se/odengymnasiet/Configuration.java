@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 
 public class Configuration {
+
     public static final String CONFIGURATION_FILE_PATH = "application.xml";
 
     public void readFile() {

@@ -7,6 +7,7 @@ import se.odengymnasiet.DocumentSerializable;
 import java.time.Instant;
 
 public abstract class Model implements DocumentSerializable {
+
     public static final String FIELD_ID = "_id";
     public static final String FIELD_UPDATED_AT = "updated_at";
 

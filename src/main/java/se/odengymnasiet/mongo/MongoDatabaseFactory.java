@@ -20,6 +20,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class MongoDatabaseFactory implements DatabaseFactory {
+
     public static final String DEFAULT_HOST;
     public static final int DEFAULT_PORT;
     public static final ServerAddress DEFAULT_SERVER_ADDRESS;

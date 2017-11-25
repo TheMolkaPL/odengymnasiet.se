@@ -6,6 +6,7 @@ import org.bson.types.ObjectId;
 import se.odengymnasiet.mongo.Model;
 
 public class Marketing extends Model {
+
     public static final Marketing NULL = new NullMarketing();
 
     public static final String FIELD_IMAGE = "image";

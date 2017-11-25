@@ -8,6 +8,7 @@ import spark.Request;
 import spark.Response;
 
 public class ContactController extends Controller {
+
     public ContactController(Application app,
                              Request request,
                              Response response) {

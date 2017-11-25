@@ -11,6 +11,7 @@ import spark.Response;
 import java.util.Collection;
 
 public class IndexController extends Controller {
+
     private final MarketingRepository marketings;
 
     public IndexController(Application application,

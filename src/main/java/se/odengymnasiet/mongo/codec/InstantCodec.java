@@ -11,6 +11,7 @@ import java.time.Instant;
 import java.util.Date;
 
 public class InstantCodec implements Codec<Instant> {
+
     private final DateCodec dateCodec;
 
     public InstantCodec() {

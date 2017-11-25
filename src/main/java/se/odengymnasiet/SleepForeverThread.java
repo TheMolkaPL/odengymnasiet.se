@@ -1,6 +1,7 @@
 package se.odengymnasiet;
 
 public class SleepForeverThread extends Thread {
+
     public SleepForeverThread() {
         super("Sleep Forever Thread");
     }

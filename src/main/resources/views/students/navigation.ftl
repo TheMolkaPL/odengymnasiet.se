@@ -11,8 +11,8 @@
     </div>
 
     <div class="list-group">
-        <a class="list-group-item list-group-item-action" href="https://facebook.com/odengymnaiset">Facebook</a>
-        <a class="list-group-item list-group-item-action" href="https://sms.schoolsoft.se/aprendere">SchoolSoft</a>
-        <a class="list-group-item list-group-item-action" href="https://mail.aprendere.se">E-post</a>
+        <a class="list-group-item list-group-item-action" href="//mail.aprendere.se">E-post</a>
+        <a class="list-group-item list-group-item-action" href="//facebook.com/odengymnasiet">Facebook</a>
+        <a class="list-group-item list-group-item-action" href="//sms.schoolsoft.se/aprendere">SchoolSoft</a>
     </div>
 </section>

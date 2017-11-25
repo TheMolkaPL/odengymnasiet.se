@@ -5,18 +5,19 @@ import se.odengymnasiet.mongo.Model;
 
 import java.util.Collection;
 
-public interface Repository<T extends Model> {
+public interface Repository<E extends Model> {
+
     void delete(ObjectId id);
 
-    default void delete(T model) {
+    default void delete(E model) {
         this.delete(model.getId());
     }
 
-    T find(ObjectId id);
+    E find(ObjectId id);
 
-    Collection<T> findAll();
+    Collection<E> findAll();
 
-    void update(T model);
+    void update(E model);
 
-    void save(T model);
+    void save(E model);
 }

@@ -7,6 +7,7 @@ import spark.Request;
 import spark.Response;
 
 public class AdminController extends Controller {
+
     public AdminController(Application application,
                            Request request,
                            Response response) {

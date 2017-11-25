@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public abstract class Controller {
+
     private final Application application;
     private final Request request;
     private final Response response;

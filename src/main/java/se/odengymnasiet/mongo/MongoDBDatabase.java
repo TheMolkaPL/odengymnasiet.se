@@ -7,14 +7,18 @@ import org.slf4j.Logger;
 import se.odengymnasiet.Application;
 import se.odengymnasiet.Database;
 import se.odengymnasiet.Repository;
+import se.odengymnasiet.contact.MongoGroupRepository;
+import se.odengymnasiet.contact.MongoPersonRepository;
 import se.odengymnasiet.index.MongoMarketingRepository;
 import se.odengymnasiet.program.MongoProgramRepository;
 
 import java.lang.reflect.Constructor;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.function.Consumer;
 
 public class MongoDBDatabase extends Database {
+
     private final MongoClient client;
     private final MongoDatabase database;
 
@@ -40,7 +44,9 @@ public class MongoDBDatabase extends Database {
     @Override
     public void installDefaultRepositories(Consumer<Repository> consumer) {
         Arrays.asList(
+                MongoGroupRepository.class,
                 MongoMarketingRepository.class,
+                MongoPersonRepository.class,
                 MongoProgramRepository.class
         ).forEach(clazz -> {
             try {
@@ -76,7 +82,18 @@ public class MongoDBDatabase extends Database {
         constructor.setAccessible(true);
 
         String name = this.getCollectionName(collectionName.value());
+        if (name == null) {
+            return null;
+        }
+
+        MongoDatabase database = this.getDatabase();
+        if (!database.listCollectionNames()
+                .into(new ArrayList<>()).contains(name)) {
+            this.getLogger().info("Creating new '" + name + "' collection...");
+            database.createCollection(name);
+        }
+
         return (Repository) constructor.newInstance(
-                this.getDatabase(), this.getDatabase().getCollection(name));
+                database, database.getCollection(name));
     }
 }
