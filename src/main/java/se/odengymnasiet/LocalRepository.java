@@ -1,7 +1,6 @@
 package se.odengymnasiet;
 
 import org.bson.types.ObjectId;
-import se.odengymnasiet.mongo.Model;
 
 import java.util.Collection;
 import java.util.LinkedHashMap;
@@ -10,6 +9,11 @@ import java.util.Map;
 public class LocalRepository<E extends Model> implements Repository<E> {
 
     protected final Map<ObjectId, E> container = new LinkedHashMap<>();
+
+    @Override
+    public boolean contains(ObjectId id) {
+        return this.container.containsKey(id);
+    }
 
     @Override
     public void delete(ObjectId id) {

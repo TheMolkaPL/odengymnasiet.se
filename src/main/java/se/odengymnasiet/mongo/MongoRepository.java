@@ -5,6 +5,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
 import org.bson.types.ObjectId;
+import se.odengymnasiet.Model;
 import se.odengymnasiet.Repository;
 
 import java.util.ArrayList;
@@ -28,6 +29,11 @@ public abstract class MongoRepository<E extends Model>
 
     public Document serialize(E model) {
         return model.serialize();
+    }
+
+    @Override
+    public boolean contains(ObjectId id) {
+        return this.collection.find(eq(id)).first() != null;
     }
 
     @Override

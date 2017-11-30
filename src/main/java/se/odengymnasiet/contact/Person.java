@@ -2,7 +2,7 @@ package se.odengymnasiet.contact;
 
 import org.bson.Document;
 import org.bson.types.ObjectId;
-import se.odengymnasiet.mongo.Model;
+import se.odengymnasiet.Model;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -11,6 +11,7 @@ public class Person extends Model implements Comparable<Person> {
 
     public static final String FIELD_FIRST_NAME = "first_name";
     public static final String FIELD_LAST_NAME = "last_name";
+    public static final String FIELD_CONTACTABLE = "contactable";
     public static final String FIELD_FOCUSED = "focused";
     public static final String FIELD_PRIORITY = "priority";
     public static final String FIELD_GROUPS = "groups";
@@ -19,6 +20,7 @@ public class Person extends Model implements Comparable<Person> {
 
     private String firstName;
     private String lastName;
+    private boolean contactable;
     private boolean focused;
     private int priority;
     private List<PersonGroup> groups;
@@ -77,6 +79,10 @@ public class Person extends Model implements Comparable<Person> {
         return this.telephone;
     }
 
+    public boolean isContactable() {
+        return this.contactable;
+    }
+
     public boolean isFocused() {
         return this.focused;
     }
@@ -87,6 +93,10 @@ public class Person extends Model implements Comparable<Person> {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public void setContactable(boolean contactable) {
+        this.contactable = contactable;
     }
 
     public void setFocused(boolean focused) {
@@ -113,6 +123,7 @@ public class Person extends Model implements Comparable<Person> {
     public Document serialize(Document data) {
         data.put(FIELD_FIRST_NAME, this.getFirstName());
         data.put(FIELD_LAST_NAME, this.getLastName());
+        data.put(FIELD_CONTACTABLE, this.isContactable());
         data.put(FIELD_FOCUSED, this.isFocused());
         data.put(FIELD_PRIORITY, this.getPriority());
         data.put(FIELD_GROUPS, this.getGroupsSerialized());
@@ -125,6 +136,7 @@ public class Person extends Model implements Comparable<Person> {
         Person person = new Person(data);
         person.setFirstName(data.getString(FIELD_FIRST_NAME));
         person.setLastName(data.getString(FIELD_LAST_NAME));
+        person.setContactable(data.getBoolean(FIELD_CONTACTABLE));
         person.setFocused(data.getBoolean(FIELD_FOCUSED));
         person.setPriority(data.getInteger(FIELD_PRIORITY));
         person.setGroups(deserializeGroups(data.get(FIELD_GROUPS,

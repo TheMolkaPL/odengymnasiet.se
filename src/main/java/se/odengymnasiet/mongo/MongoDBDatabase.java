@@ -11,6 +11,7 @@ import se.odengymnasiet.contact.MongoGroupRepository;
 import se.odengymnasiet.contact.MongoPersonRepository;
 import se.odengymnasiet.index.MongoMarketingRepository;
 import se.odengymnasiet.program.MongoProgramRepository;
+import se.odengymnasiet.user.MongoUserRepository;
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
@@ -47,7 +48,8 @@ public class MongoDBDatabase extends Database {
                 MongoGroupRepository.class,
                 MongoMarketingRepository.class,
                 MongoPersonRepository.class,
-                MongoProgramRepository.class
+                MongoProgramRepository.class,
+                MongoUserRepository.class
         ).forEach(clazz -> {
             try {
                 consumer.accept(this.loadRepository(clazz));

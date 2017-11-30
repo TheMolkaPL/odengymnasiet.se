@@ -1,18 +1,25 @@
 package se.odengymnasiet;
 
+import freemarker.template.Version;
 import org.jdom2.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import se.odengymnasiet.route.RequestMethod;
 import se.odengymnasiet.route.RouteManager;
+import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
 import spark.Route;
 import spark.Service;
+import spark.TemplateEngine;
 import spark.servlet.SparkApplication;
+import spark.template.freemarker.FreeMarkerEngine;
 
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,8 +38,9 @@ public final class Application implements SparkApplication {
     private final Logger logger;
     private final Map<Class<? extends Repository>, Repository> repositoryMap;
     private final RouteManager routes;
-    private final Service service;
     private boolean running = false;
+    private final Service service;
+    private TemplateEngine templateEngine;
 
     public Application(String[] args) {
         this.args = args;
@@ -74,6 +82,7 @@ public final class Application implements SparkApplication {
         this.routes.readFile();
 
         this.database = this.loadDatabase(this.getConfiguration().database());
+        this.templateEngine = this.loadTemplateEngine();
 
         Service http = this.getService()
                 .ipAddress(this.configuration.httpHost())
@@ -173,6 +182,10 @@ public final class Application implements SparkApplication {
         return this.service;
     }
 
+    public TemplateEngine getTemplateEngine() {
+        return this.templateEngine;
+    }
+
     public boolean installRepository(Repository<?> repository) {
         RepositoryHandler handler = repository.getClass()
                 .getDeclaredAnnotation(RepositoryHandler.class);
@@ -194,6 +207,18 @@ public final class Application implements SparkApplication {
 
     public boolean isRunning() {
         return this.running;
+    }
+
+    public String renderView(String view, Map<String, Object> attributes) {
+        if (attributes == null) {
+            attributes = new HashMap<>();
+        }
+
+        return this.renderView(new ModelAndView(attributes, view + ".ftl"));
+    }
+
+    public String renderView(ModelAndView modelAndView) {
+        return this.getTemplateEngine().render(modelAndView);
     }
 
     public Route route(Method method) {
@@ -249,5 +274,29 @@ public final class Application implements SparkApplication {
         }
 
         return value;
+    }
+
+    private TemplateEngine loadTemplateEngine() {
+        Version version = freemarker.template.Configuration.VERSION_2_3_23;
+        freemarker.template.Configuration config =
+                new freemarker.template.Configuration(version);
+
+        ClassLoader classLoader = Application.class.getClassLoader();
+
+        config.setClassLoaderForTemplateLoading(classLoader,
+                                                Controller.VIEWS_DIRECTORY);
+        config.setDefaultEncoding(StandardCharsets.UTF_8.name());
+        config.setWhitespaceStripping(true);
+
+        String viewsPath = this.getConfiguration().viewsPath();
+        if (viewsPath != null) {
+            try {
+                config.setDirectoryForTemplateLoading(new File(viewsPath));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return new FreeMarkerEngine(config);
     }
 }

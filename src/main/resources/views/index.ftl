@@ -9,7 +9,8 @@
 
 <div class="jumbotron jumbotron-fluid brand-jumbotron" style="background-image: url('${marketing.image}');
                                                               background-repeat: no-repeat;
-                                                              background-size: 100%;
+                                                              background-size: cover;
+                                                              <#if marketing.fixed>background-attachment: fixed;</#if>
                                                               background-position: 50% ${marketing.position * 100}%;">
     <div class="container">
         <h1 class="display-1" style="text-shadow: 0px 0px 3px;">Odengymnasiet</h1>
@@ -44,26 +45,14 @@
                                         margin-top: 15px;
                                         margin-bottom: 15px;">Visa aktuella inlägg</a></noscript>
 
-                    <article>
-                        <div class="fb-post"
-                             data-href="//www.facebook.com/odengymnasiet/posts/1362168337242891"
-                             data-width=""
-                             data-show-text="true"></div>
-                    </article>
-
-                    <article>
-                        <div class="fb-post"
-                             data-href="//www.facebook.com/odengymnasiet/posts/1360244227435302"
-                             data-width=""
-                             data-show-text="true"></div>
-                    </article>
-
-                    <article>
-                        <div class="fb-post"
-                             data-href="//www.facebook.com/odengymnasiet/posts/1352889234837468"
-                             data-width=""
-                             data-show-text="true"></div>
-                    </article>
+                    <#list news as postId>
+                        <article>
+                            <div class="fb-post"
+                                 data-href="//www.facebook.com/odengymnasiet/posts/${postId?c}"
+                                 data-width=""
+                                 data-show-text="true"></div>
+                        </article>
+                    </#list>
 
                     <a id="more-posts-button"
                        href="//www.facebook.com/odengymnasiet/posts"

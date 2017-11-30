@@ -2,7 +2,7 @@ package se.odengymnasiet.contact;
 
 import org.bson.Document;
 import org.bson.types.ObjectId;
-import se.odengymnasiet.mongo.Model;
+import se.odengymnasiet.Model;
 
 public class Group extends Model implements Comparable<Group> {
 

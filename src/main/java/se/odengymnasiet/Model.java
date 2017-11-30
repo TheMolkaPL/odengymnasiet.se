@@ -1,8 +1,7 @@
-package se.odengymnasiet.mongo;
+package se.odengymnasiet;
 
 import org.bson.Document;
 import org.bson.types.ObjectId;
-import se.odengymnasiet.DocumentSerializable;
 
 import java.time.Instant;
 
@@ -29,6 +28,15 @@ public abstract class Model implements DocumentSerializable {
 
     public ObjectId getId() {
         return this.id;
+    }
+
+    public Instant getCreatedAt() {
+        ObjectId id = this.getId();
+        if (id != null) {
+            return this.getId().getDate().toInstant();
+        }
+
+        return null;
     }
 
     public Instant getUpdatedAt() {

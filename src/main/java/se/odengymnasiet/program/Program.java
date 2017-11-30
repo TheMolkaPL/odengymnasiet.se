@@ -2,7 +2,7 @@ package se.odengymnasiet.program;
 
 import org.bson.Document;
 import org.bson.types.ObjectId;
-import se.odengymnasiet.mongo.Model;
+import se.odengymnasiet.Model;
 
 public class Program extends Model implements Comparable<Program> {
 

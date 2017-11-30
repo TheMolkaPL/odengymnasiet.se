@@ -1,11 +1,16 @@
 package se.odengymnasiet;
 
 import org.bson.types.ObjectId;
-import se.odengymnasiet.mongo.Model;
 
 import java.util.Collection;
 
 public interface Repository<E extends Model> {
+
+    boolean contains(ObjectId id);
+
+    default boolean contains(E model) {
+        return this.contains(model.getId());
+    }
 
     void delete(ObjectId id);
 

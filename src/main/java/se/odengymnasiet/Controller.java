@@ -1,14 +1,8 @@
 package se.odengymnasiet;
 
-import freemarker.template.Configuration;
-import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
-import spark.template.freemarker.FreeMarkerEngine;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -87,27 +81,6 @@ public abstract class Controller {
     }
 
     public String render(String view, Map<String, Object> attributes) {
-        if (attributes == null) {
-            attributes = new HashMap<>();
-        }
-
-        ClassLoader classLoader = Controller.class.getClassLoader();
-
-        Configuration config = new Configuration(Configuration.VERSION_2_3_23);
-        config.setClassLoaderForTemplateLoading(classLoader, VIEWS_DIRECTORY);
-        config.setDefaultEncoding(StandardCharsets.UTF_8.name());
-        config.setWhitespaceStripping(true);
-
-        String viewsPath = this.getApplication().getConfiguration().viewsPath();
-        if (viewsPath != null) {
-            try {
-                config.setDirectoryForTemplateLoading(new File(viewsPath));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        ModelAndView modelAndView = new ModelAndView(attributes, view + ".ftl");
-        return new FreeMarkerEngine(config).render(modelAndView);
+        return this.getApplication().renderView(view, attributes);
     }
 }

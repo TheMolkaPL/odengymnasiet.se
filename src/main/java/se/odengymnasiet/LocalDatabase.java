@@ -5,6 +5,7 @@ import se.odengymnasiet.contact.GroupRepository;
 import se.odengymnasiet.contact.PersonRepository;
 import se.odengymnasiet.index.MarketingRepository;
 import se.odengymnasiet.program.ProgramRepository;
+import se.odengymnasiet.user.UserRepository;
 
 import java.util.Arrays;
 import java.util.function.Consumer;
@@ -29,7 +30,8 @@ public class LocalDatabase extends Database {
                 GroupRepository.LOCAL,
                 MarketingRepository.LOCAL,
                 PersonRepository.LOCAL,
-                ProgramRepository.LOCAL
+                ProgramRepository.LOCAL,
+                UserRepository.LOCAL
         ).forEach(repository -> this.getApplication()
                 .installRepository(repository));
     }
