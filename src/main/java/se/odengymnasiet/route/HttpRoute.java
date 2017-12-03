@@ -7,7 +7,9 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-public @interface Route {
+public @interface HttpRoute {
+
+    RequestMethod[] methods() default RequestMethod.GET;
 
     String value();
 }

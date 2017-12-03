@@ -11,6 +11,11 @@ public class LocalRepository<E extends Model> implements Repository<E> {
     protected final Map<ObjectId, E> container = new LinkedHashMap<>();
 
     @Override
+    public long count() {
+        return this.container.size();
+    }
+
+    @Override
     public boolean contains(ObjectId id) {
         return this.container.containsKey(id);
     }

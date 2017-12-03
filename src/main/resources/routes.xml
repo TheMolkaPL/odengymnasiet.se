@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<routes>
-    <route class="se.odengymnasiet.index.IndexController">
-        <route class="se.odengymnasiet.admin.AdminController" path="/admin" />
-        <route class="se.odengymnasiet.contact.ContactController" path="/contact" />
-        <route class="se.odengymnasiet.program.ProgramsController" path="/programs" />
-        <route class="se.odengymnasiet.student.StudentsController" path="/students" />
-    </route>
-</routes>

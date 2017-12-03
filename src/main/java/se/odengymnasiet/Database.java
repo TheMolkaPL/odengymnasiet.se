@@ -9,8 +9,8 @@ public class Database {
     private final Application application;
     private final Logger logger;
 
-    public Database(Application application, Logger logger) {
-        this.application = application;
+    public Database(Application app, Logger logger) {
+        this.application = app;
         this.logger = logger;
     }
 
@@ -29,7 +29,8 @@ public class Database {
     }
 
     public void installDefaultRepositories() {
-        this.installDefaultRepositories(this.application::installRepository);
+        RepositoryContainer container = this.application.getRepositories();
+        this.installDefaultRepositories(container::install);
     }
 
     public void installDefaultRepositories(Consumer<Repository> consumer) {

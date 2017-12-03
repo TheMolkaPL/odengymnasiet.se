@@ -4,8 +4,14 @@ import com.mongodb.MongoClient;
 import com.mongodb.MongoClientOptions;
 import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
+import org.bson.BsonType;
+import org.bson.Document;
+import org.bson.codecs.BsonTypeClassMap;
 import org.bson.codecs.Codec;
+import org.bson.codecs.DocumentCodec;
+import org.bson.codecs.configuration.CodecProvider;
 import org.bson.codecs.configuration.CodecRegistries;
+import org.bson.codecs.configuration.CodecRegistry;
 import org.jdom2.Attribute;
 import org.jdom2.DataConversionException;
 import org.jdom2.Element;
@@ -15,6 +21,7 @@ import se.odengymnasiet.Database;
 import se.odengymnasiet.DatabaseFactory;
 import se.odengymnasiet.mongo.codec.InstantCodec;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -41,7 +48,7 @@ public class MongoDatabaseFactory implements DatabaseFactory {
     }
 
     @Override
-    public Database newDatabase(Application application,
+    public Database newDatabase(Application app,
                                 Logger logger,
                                 Element configuration) {
         List<ServerAddress> addresses = this.serverAddresses(configuration);
@@ -63,12 +70,13 @@ public class MongoDatabaseFactory implements DatabaseFactory {
 
         MongoClientOptions options = MongoClientOptions.builder()
                 .codecRegistry(CodecRegistries.fromRegistries(
-                        MongoClient.getDefaultCodecRegistry(),
-                        CodecRegistries.fromCodecs(this.codecs())))
+                        CodecRegistries.fromCodecs(this.codecs()),
+                        CodecRegistries.fromProviders(this.provider()),
+                        MongoClient.getDefaultCodecRegistry()))
                 .build();
 
         MongoClient client = new MongoClient(addresses, credentials, options);
-        return new MongoDBDatabase(application, logger, client, database);
+        return new MongoDBDatabase(app, logger, client, database);
     }
 
     private List<ServerAddress> serverAddresses(Element configuration) {
@@ -122,6 +130,22 @@ public class MongoDatabaseFactory implements DatabaseFactory {
     private Codec<?>[] codecs() {
         return new Codec[] {
                 new InstantCodec()
+        };
+    }
+
+    private CodecProvider provider() {
+        BsonTypeClassMap bsonTypes = new BsonTypeClassMap(
+                Collections.singletonMap(BsonType.DATE_TIME, Instant.class));
+
+        return new CodecProvider() {
+            @Override
+            public <T> Codec<T> get(Class<T> clazz, CodecRegistry registry) {
+                if (clazz.equals(Document.class)) {
+                    return (Codec<T>) new DocumentCodec(registry, bsonTypes);
+                }
+
+                return null;
+            }
         };
     }
 }

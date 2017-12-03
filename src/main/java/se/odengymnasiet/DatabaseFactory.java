@@ -5,7 +5,7 @@ import org.slf4j.Logger;
 
 public interface DatabaseFactory {
 
-    Database newDatabase(Application application,
+    Database newDatabase(Application app,
                          Logger logger,
                          Element configuration);
 }

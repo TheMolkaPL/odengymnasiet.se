@@ -20,6 +20,7 @@
                                 <td scope="col">Telefon</td>
                             </tr>
                         </thead>
+
                         <tbody>
                             <tr>
                                 <td class="text-info">Erik Eriksson</td>
@@ -63,6 +64,7 @@
                                 <td scope="col">Telefon</td>
                             </tr>
                         </thead>
+
                         <tbody>
                             <tr>
                                 <td>Erik Eriksson</td>

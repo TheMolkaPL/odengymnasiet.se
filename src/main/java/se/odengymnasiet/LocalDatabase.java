@@ -12,8 +12,8 @@ import java.util.function.Consumer;
 
 public class LocalDatabase extends Database {
 
-    public LocalDatabase(Application application, Logger logger) {
-        super(application, logger);
+    public LocalDatabase(Application app, Logger logger) {
+        super(app, logger);
     }
 
     @Override
@@ -32,7 +32,6 @@ public class LocalDatabase extends Database {
                 PersonRepository.LOCAL,
                 ProgramRepository.LOCAL,
                 UserRepository.LOCAL
-        ).forEach(repository -> this.getApplication()
-                .installRepository(repository));
+        ).forEach(consumer::accept);
     }
 }

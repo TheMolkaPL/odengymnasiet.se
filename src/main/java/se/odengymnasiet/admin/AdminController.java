@@ -2,34 +2,40 @@ package se.odengymnasiet.admin;
 
 import se.odengymnasiet.Application;
 import se.odengymnasiet.Controller;
-import se.odengymnasiet.route.Route;
+import se.odengymnasiet.route.HttpRoute;
 import spark.Request;
 import spark.Response;
 
 public class AdminController extends Controller {
 
-    public AdminController(Application application,
+    public AdminController(Application app,
+                           AdminManifest manifest,
                            Request request,
                            Response response) {
-        super(application, request, response);
+        super(app, manifest, request, response);
     }
 
-    @Route("/")
+    @HttpRoute("/")
     public Object index() {
         return "Admin Control Panel";
     }
 
-    @Route("/login")
+    @HttpRoute("/dashboard")
+    public Object dashboard() {
+        return "Dashboard";
+    }
+
+    @HttpRoute("/login")
     public Object login() {
         return "Log In";
     }
 
-    @Route("/logout")
+    @HttpRoute("/logout")
     public Object logout() {
         return "Log Out";
     }
 
-    @Route("/reset")
+    @HttpRoute("/reset")
     public Object reset() {
         return "Reset Password";
     }

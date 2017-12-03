@@ -4,12 +4,14 @@ import freemarker.template.Version;
 import org.jdom2.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import se.odengymnasiet.admin.AdminManifest;
+import se.odengymnasiet.contact.ContactManifest;
+import se.odengymnasiet.index.IndexManifest;
+import se.odengymnasiet.program.ProgramsManifest;
 import se.odengymnasiet.route.RequestMethod;
-import se.odengymnasiet.route.RouteManager;
+import se.odengymnasiet.route.RouteExecutorContainer;
+import se.odengymnasiet.student.StudentsManifest;
 import spark.ModelAndView;
-import spark.Request;
-import spark.Response;
-import spark.Route;
 import spark.Service;
 import spark.TemplateEngine;
 import spark.servlet.SparkApplication;
@@ -17,9 +19,8 @@ import spark.template.freemarker.FreeMarkerEngine;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,8 +37,8 @@ public final class Application implements SparkApplication {
     private final Configuration configuration;
     private Database database;
     private final Logger logger;
-    private final Map<Class<? extends Repository>, Repository> repositoryMap;
-    private final RouteManager routes;
+    private ManifestManager manifests;
+    private final RepositoryContainer repositories;
     private boolean running = false;
     private final Service service;
     private TemplateEngine templateEngine;
@@ -46,8 +47,8 @@ public final class Application implements SparkApplication {
         this.args = args;
         this.configuration = new Configuration();
         this.logger = LoggerFactory.getLogger(Application.class);
-        this.repositoryMap = new HashMap<>();
-        this.routes = new RouteManager();
+        this.manifests = new ManifestManager(this);
+        this.repositories = new RepositoryContainer(this);
         this.service = Service.ignite();
     }
 
@@ -79,10 +80,11 @@ public final class Application implements SparkApplication {
         }, "Application Shutdown Hook"));
 
         this.configuration.readFile();
-        this.routes.readFile();
 
         this.database = this.loadDatabase(this.getConfiguration().database());
         this.templateEngine = this.loadTemplateEngine();
+
+        this.registerDefaultManifests();
 
         Service http = this.getService()
                 .ipAddress(this.configuration.httpHost())
@@ -116,18 +118,30 @@ public final class Application implements SparkApplication {
 
         this.getDatabase().installDefaultRepositories();
 
-        this.routes.getRoutes().forEach((path, target) -> {
-            RequestMethod[] requestMethods = target.getRequestMethods();
-            for (RequestMethod method : requestMethods) {
-                method.installRoute(http, path, this.route(target.getMethod()));
+        this.getManifests().getManifests().forEach(manifest -> {
+            try {
+                manifest.installRepositories(this.getRepositories());
+            } catch (Throwable th) {
+                this.getLogger().error("Could not install repositories", th);
             }
         });
+
+        this.loadRoutes();
 
         try {
             this.getDatabase().connect();
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        this.getManifests().getManifests().forEach(manifest -> {
+            try {
+                manifest.enable();
+            } catch (Throwable th) {
+                this.getLogger().error("Could not handle 'enable' event on " +
+                        manifest.getName() + ".", th);
+            }
+        });
 
         this.running = true;
 
@@ -141,8 +155,19 @@ public final class Application implements SparkApplication {
             throw new IllegalStateException("Already Stopped!");
         }
 
+        this.running = false;
+
         this.logger.info("Stopping the server...");
         long initTime = System.currentTimeMillis();
+
+        this.getManifests().getManifests().forEach(manifest -> {
+            try {
+                manifest.disable();
+            } catch (Throwable th) {
+                this.getLogger().error("Could not handle 'disable' event on " +
+                        manifest.getName() + ".", th);
+            }
+        });
 
         this.getService().stop();
 
@@ -151,8 +176,6 @@ public final class Application implements SparkApplication {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        this.running = false;
 
         long initTimeTook = System.currentTimeMillis() - initTime;
         this.logger.info("Server stopped in " + initTimeTook + " ms.");
@@ -170,12 +193,12 @@ public final class Application implements SparkApplication {
         return this.logger;
     }
 
-    public <T extends Repository> T getRepository(Class<T> repository) {
-        return (T) this.repositoryMap.get(repository);
+    public ManifestManager getManifests() {
+        return this.manifests;
     }
 
-    public RouteManager getRoutes() {
-        return this.routes;
+    public RepositoryContainer getRepositories() {
+        return this.repositories;
     }
 
     public Service getService() {
@@ -184,25 +207,6 @@ public final class Application implements SparkApplication {
 
     public TemplateEngine getTemplateEngine() {
         return this.templateEngine;
-    }
-
-    public boolean installRepository(Repository<?> repository) {
-        RepositoryHandler handler = repository.getClass()
-                .getDeclaredAnnotation(RepositoryHandler.class);
-        if (handler == null) {
-            return false;
-        }
-
-        Class<? extends Repository> clazz = handler.value();
-        if (this.repositoryMap.containsKey(clazz)) {
-            return false;
-        }
-
-        this.repositoryMap.put(clazz, repository);
-        this.getLogger().info("Repository {} has been installed as {}.",
-                clazz.getSimpleName(),
-                repository.getClass().getSimpleName());
-        return true;
     }
 
     public boolean isRunning() {
@@ -219,30 +223,6 @@ public final class Application implements SparkApplication {
 
     public String renderView(ModelAndView modelAndView) {
         return this.getTemplateEngine().render(modelAndView);
-    }
-
-    public Route route(Method method) {
-        try {
-            Constructor<?> constructor = method.getDeclaringClass()
-                    .getConstructor(Application.class,
-                                    Request.class,
-                                    Response.class);
-            constructor.setAccessible(true);
-
-            return (request, response) -> {
-                Object obj = constructor.newInstance(this, request, response);
-
-                method.setAccessible(true);
-                return method.invoke(obj);
-            };
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-
-            return (request, response) -> {
-                response.status(500);
-                return response.status();
-            };
-        }
     }
 
     private Database loadDatabase(Element configuration) {
@@ -276,6 +256,46 @@ public final class Application implements SparkApplication {
         return value;
     }
 
+    private void loadRoutes() {
+        ManifestManager manifests = this.getManifests();
+
+        for (RequestMethod requestMethod : RequestMethod.values()) {
+            manifests.getManifests().forEach(manifest -> {
+                String path = this.fetchManifestParentRoute(manifest);
+                this.loadRoutesFromManifest(requestMethod, manifest, path);
+            });
+        }
+    }
+
+    private String fetchManifestParentRoute(Manifest<?> manifest) {
+        String route = "";
+
+        if (manifest != null) {
+            Class<? extends Manifest> parent = manifest.getParent();
+            if (parent != null) {
+                Manifest<?> parentClass = this.getManifests().byClass(parent);
+                if (parentClass != null) {
+                    route += this.fetchManifestParentRoute(parentClass);
+                    route += parentClass.getRoute();
+                }
+            }
+        }
+
+        return route;
+    }
+
+    private void loadRoutesFromManifest(RequestMethod requestMethod,
+                                        Manifest<?> manifest,
+                                        String parentRoute) {
+        RouteExecutorContainer routes = manifest.getRoutes().get(requestMethod);
+        routes.keys().forEach(path -> {
+            String route = parentRoute + manifest.getRoute() + path;
+            requestMethod.installRoute(this.getService(), route,
+                    (request, response) -> routes.of(path)
+                            .execute(path, request, response));
+        });
+    }
+
     private TemplateEngine loadTemplateEngine() {
         Version version = freemarker.template.Configuration.VERSION_2_3_23;
         freemarker.template.Configuration config =
@@ -298,5 +318,15 @@ public final class Application implements SparkApplication {
         }
 
         return new FreeMarkerEngine(config);
+    }
+
+    private void registerDefaultManifests() {
+        Arrays.asList(
+                AdminManifest.class,
+                ContactManifest.class,
+                IndexManifest.class,
+                ProgramsManifest.class,
+                StudentsManifest.class
+        ).forEach(manifest -> this.getManifests().registerManifest(manifest));
     }
 }

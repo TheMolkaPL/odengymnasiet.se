@@ -3,6 +3,8 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
         <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" rel="stylesheet">
         <link href="//fonts.googleapis.com/css?family=Nunito:400|Roboto:300" rel="stylesheet">
         <link href="/stylesheets/application.css" rel="stylesheet">
@@ -51,6 +53,10 @@
                                 <a class="nav-link <#if app_nav == "contact">active</#if>" href="/contact">Kontakt</a>
                             </li>
                         </ul>
+
+                        <div class="pull-right">
+                            <a class="btn btn-outline-danger" href="/admin" target="_blank" rel="noopener">Hantera webbsidan</a>
+                        </div>
                     </div>
                 </div>
             </nav>

@@ -4,6 +4,7 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
+import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 import se.odengymnasiet.Model;
 import se.odengymnasiet.Repository;
@@ -32,6 +33,11 @@ public abstract class MongoRepository<E extends Model>
     }
 
     @Override
+    public long count() {
+        return this.collection.count();
+    }
+
+    @Override
     public boolean contains(ObjectId id) {
         return this.collection.find(eq(id)).first() != null;
     }
@@ -57,7 +63,7 @@ public abstract class MongoRepository<E extends Model>
 
     @Override
     public void update(E model) {
-        BasicDBObject update = new BasicDBObject("$set", this.serialize(model));
+        Bson update = new BasicDBObject("$set", this.serialize(model));
         this.collection.updateOne(eq(model.getId()), update);
     }
 

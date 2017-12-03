@@ -23,11 +23,11 @@ public class MongoDBDatabase extends Database {
     private final MongoClient client;
     private final MongoDatabase database;
 
-    public MongoDBDatabase(Application application,
+    public MongoDBDatabase(Application app,
                            Logger logger,
                            MongoClient client,
                            String databaseName) {
-        super(application, logger);
+        super(app, logger);
 
         this.client = client;
         this.database = client.getDatabase(databaseName);

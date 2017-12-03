@@ -6,6 +6,8 @@ import java.util.Collection;
 
 public interface Repository<E extends Model> {
 
+    long count();
+
     boolean contains(ObjectId id);
 
     default boolean contains(E model) {

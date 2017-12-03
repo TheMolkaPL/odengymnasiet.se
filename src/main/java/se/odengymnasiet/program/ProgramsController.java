@@ -3,33 +3,34 @@ package se.odengymnasiet.program;
 import se.odengymnasiet.Application;
 import se.odengymnasiet.Attributes;
 import se.odengymnasiet.Controller;
-import se.odengymnasiet.route.Route;
+import se.odengymnasiet.route.HttpRoute;
 import spark.Request;
 import spark.Response;
 
-public class ProgramsController extends Controller {
+public class ProgramsController extends Controller<ProgramsManifest> {
 
-    private final ProgramRepository programs;
+    private final ProgramRepository programRepository;
 
-    public ProgramsController(Application application,
+    public ProgramsController(Application app,
+                              ProgramsManifest manifest,
                               Request request,
                               Response response) {
-        super(application, request, response);
+        super(app, manifest, request, response);
 
-        this.programs = application.getRepository(ProgramRepository.class);
+        this.programRepository = manifest.getProgramRepository();
     }
 
-    @Route("/")
+    @HttpRoute("/")
     public Object index() {
         Attributes attributes = Attributes.create()
-                .add("programs", this.programs.findAll());
+                .add("programs", this.programRepository.findAll());
         return this.ok("programs/index", attributes, "Våra utbildningar");
     }
 
-    @Route("/:program")
+    @HttpRoute("/:program")
     public Object program() {
         String path = this.getRequest().params(":program");
-        Program program = this.programs.findByPath(path);
+        Program program = this.programRepository.findByPath(path);
 
         if (program != null) {
             Attributes attributes = Attributes.create()
