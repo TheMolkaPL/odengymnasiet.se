@@ -10,89 +10,38 @@
     <div class="container">
         <div class="row">
             <div class="col-md-9">
-                <section>
-                    <table class="table table-striped table-hover">
-                        <thead class="table-secondary">
-                            <tr>
-                                <td scope="col">Namn</td>
-                                <td scope="col">Funktion</td>
-                                <td scope="col">E-post</td>
-                                <td scope="col">Telefon</td>
-                            </tr>
-                        </thead>
+                <#list groups as group>
+                    <section>
+                        <#if group.name??>
+                            <header style="margin-top: 40px; margin-bottom: 20px;">
+                                <h3>${group.name}</h3>
+                            </header>
+                        </#if>
 
-                        <tbody>
-                            <tr>
-                                <td class="text-info">Erik Eriksson</td>
-                                <td>rektor</td>
-                                <td><a href="mailto:erik.eriksson@odengymnasiet.se">erik.eriksson@odengymnasiet.se</a></td>
-                                <td><a href="tel+46123456789">01 234 567 89</a></td>
-                            </tr>
-                            <tr>
-                                <td class="text-info">Erik Eriksson</td>
-                                <td>biträdande rektor</td>
-                                <td><a href="mailto:erik.eriksson@odengymnasiet.se">erik.eriksson@odengymnasiet.se</a></td>
-                                <td><a href="tel+46123456789">01 234 567 89</a></td>
-                            </tr>
-                            <tr>
-                                <td>Erik Eriksson</td>
-                                <td>ekonomichef</td>
-                                <td><a href="mailto:erik.eriksson@odengymnasiet.se">erik.eriksson@odengymnasiet.se</a></td>
-                                <td><a href="tel+46123456789">01 234 567 89</a></td>
-                            </tr>
-                            <tr>
-                                <td>Erik Eriksson</td>
-                                <td>IT-support</td>
-                                <td><a href="mailto:erik.eriksson@odengymnasiet.se">erik.eriksson@odengymnasiet.se</a></td>
-                                <td><a href="tel+46123456789">01 234 567 89</a></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </section>
+                        <table class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <td scope="col">Namn</td>
+                                    <td scope="col">Funktion</td>
+                                    <td scope="col">E-post</td>
+                                    <td scope="col" style="width: 140px;">Telefon</td>
+                                </tr>
+                            </thead>
 
-                <section style="margin-top: 40px;">
-                    <header style="margin-bottom: 20px;">
-                        <h3>Lärare</h3>
-                    </header>
-
-                    <table class="table table-striped table-hover">
-                        <thead class="table-secondary">
-                            <tr>
-                                <td scope="col">Namn</td>
-                                <td scope="col">Ämne</td>
-                                <td scope="col">E-post</td>
-                                <td scope="col">Telefon</td>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-                            <tr>
-                                <td>Erik Eriksson</td>
-                                <td>svenska</td>
-                                <td><a href="mailto:erik.eriksson@odengymnasiet.se">erik.eriksson@odengymnasiet.se</a></td>
-                                <td><a href="tel+46123456789">01 234 567 89</a></td>
-                            </tr>
-                            <tr>
-                                <td>Erik Eriksson</td>
-                                <td>engelska</td>
-                                <td><a href="mailto:erik.eriksson@odengymnasiet.se">erik.eriksson@odengymnasiet.se</a></td>
-                                <td><a href="tel+46123456789">01 234 567 89</a></td>
-                            </tr>
-                            <tr>
-                                <td>Erik Eriksson</td>
-                                <td>geografi<br>matematik</td>
-                                <td><a href="mailto:erik.eriksson@odengymnasiet.se">erik.eriksson@odengymnasiet.se</a></td>
-                                <td><a href="tel+46123456789">01 234 567 89</a></td>
-                            </tr>
-                            <tr>
-                                <td>Erik Eriksson</td>
-                                <td>samhällskunskap</td>
-                                <td><a href="mailto:erik.eriksson@odengymnasiet.se">erik.eriksson@odengymnasiet.se</a></td>
-                                <td><a href="tel+46123456789">01 234 567 89</a></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </section>
+                            <tbody>
+                                <#list group.persons as person>
+                                    <tr>
+                                        <#assign personName = person.person.firstName + " " + person.person.lastName>
+                                        <td<#if person.personGroup.focused> style="color: #51ADE5;"</#if>>${personName}</td>
+                                        <td>${person.personGroup.role}</td>
+                                        <td><a href="mailto:${person.person.email}">${person.person.email}</a></td>
+                                        <td><a href="tel:${person.person.telephone}">${person.person.telephonePretty}</a></td>
+                                    </tr>
+                                </#list>
+                            </tbody>
+                        </table>
+                    </section>
+                </#list>
             </div>
 
             <div class="col-md-3">

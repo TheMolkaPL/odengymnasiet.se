@@ -22,11 +22,16 @@
             </#if>
         </title>
     </head>
+
     <body>
         <header>
             <nav class="navbar navbar-expand-lg navbar-light bg-ligt">
                 <div class="container">
-                    <a class="navbar-brand" href="/">Odengymnasiet</a>
+                    <a class="navbar-brand" href="/" style="color: #254A9F;">
+                        <object type="image/svg+xml" data="/odengymnasiet-logo-classic.svg" width="30" height="30" class="d-inline-block align-top"></object>
+                        Odengymnasiet
+                    </a>
+
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
@@ -54,9 +59,11 @@
                             </li>
                         </ul>
 
-                        <div class="pull-right">
-                            <a class="btn btn-outline-danger" href="/admin" target="_blank" rel="noopener">Hantera webbsidan</a>
-                        </div>
+                        <#if admin>
+                            <div class="pull-right">
+                                <a class="btn btn-outline-danger" href="/admin/dashboard" target="_blank" rel="noopener">Hantera webbsidan</a>
+                            </div>
+                        </#if>
                     </div>
                 </div>
             </nav>

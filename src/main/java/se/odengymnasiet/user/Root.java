@@ -59,6 +59,11 @@ public class Root extends User {
                     }
 
                     @Override
+                    public boolean isFocused() {
+                        return false;
+                    }
+
+                    @Override
                     public void setId(ObjectId id) {
                     }
                 });
@@ -104,11 +109,6 @@ public class Root extends User {
 
         @Override
         public boolean isContactable() {
-            return false;
-        }
-
-        @Override
-        public boolean isFocused() {
             return false;
         }
 

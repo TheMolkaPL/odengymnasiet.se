@@ -26,7 +26,7 @@ public class Group extends Model implements Comparable<Group> {
 
     @Override
     public int compareTo(Group o) {
-        int compare = Integer.compare(this.getPriority(), o.getPriority());
+        int compare = Integer.compare(o.getPriority(), this.getPriority());
         if (compare != 0) {
             return compare;
         }

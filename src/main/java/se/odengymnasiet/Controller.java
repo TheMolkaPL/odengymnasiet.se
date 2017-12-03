@@ -85,7 +85,8 @@ public abstract class Controller<E extends Manifest> {
         Attributes layoutAttributes = Attributes.create()
                 .add("title", title)
                 .add("body", this.render(view, attributes).trim())
-                .add("app_nav", appNav.toLowerCase());
+                .add("app_nav", appNav.toLowerCase())
+                .add("admin", false); // TODO is admin?
 
         return this.render(LAYOUTS_DIRECTORY + "/" + layout, layoutAttributes);
     }

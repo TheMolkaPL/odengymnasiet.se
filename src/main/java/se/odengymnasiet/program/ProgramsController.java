@@ -7,6 +7,10 @@ import se.odengymnasiet.route.HttpRoute;
 import spark.Request;
 import spark.Response;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 public class ProgramsController extends Controller<ProgramsManifest> {
 
     private final ProgramRepository programRepository;
@@ -22,8 +26,12 @@ public class ProgramsController extends Controller<ProgramsManifest> {
 
     @HttpRoute("/")
     public Object index() {
+        List<Program> programs = new ArrayList<>(
+                this.programRepository.findAll());
+        Collections.sort(programs);
+
         Attributes attributes = Attributes.create()
-                .add("programs", this.programRepository.findAll());
+                .add("programs", programs);
         return this.ok("programs/index", attributes, "Våra utbildningar");
     }
 

@@ -12,7 +12,6 @@ public class Person extends Model implements Comparable<Person> {
     public static final String FIELD_FIRST_NAME = "first_name";
     public static final String FIELD_LAST_NAME = "last_name";
     public static final String FIELD_CONTACTABLE = "contactable";
-    public static final String FIELD_FOCUSED = "focused";
     public static final String FIELD_PRIORITY = "priority";
     public static final String FIELD_GROUPS = "groups";
     public static final String FIELD_EMAIL = "email";
@@ -21,7 +20,6 @@ public class Person extends Model implements Comparable<Person> {
     private String firstName;
     private String lastName;
     private boolean contactable;
-    private boolean focused;
     private int priority;
     private List<PersonGroup> groups;
     private String email;
@@ -40,13 +38,13 @@ public class Person extends Model implements Comparable<Person> {
 
     @Override
     public int compareTo(Person o) {
-        int compare = Integer.compare(this.getPriority(), o.getPriority());
+        int compare = Integer.compare(o.getPriority(), this.getPriority());
         if (compare != 0) {
             return compare;
         }
 
         return (this.getLastName() + this.getFirstName())
-                .compareToIgnoreCase(o.getLastName() + this.getFirstName());
+                .compareToIgnoreCase(o.getLastName() + o.getFirstName());
     }
 
     public String getFirstName() {
@@ -79,12 +77,19 @@ public class Person extends Model implements Comparable<Person> {
         return this.telephone;
     }
 
-    public boolean isContactable() {
-        return this.contactable;
+    public String getTelephonePretty() {
+        String telephone = this.getTelephone();
+        String raw = telephone.substring(
+                telephone.length() - 9, telephone.length());
+
+        return 0 + raw.substring(0, 1) + " " +
+                raw.substring(1, 4) + " " +
+                raw.substring(4, 7) + " " +
+                raw.substring(7, 9);
     }
 
-    public boolean isFocused() {
-        return this.focused;
+    public boolean isContactable() {
+        return this.contactable;
     }
 
     public void setFirstName(String firstName) {
@@ -97,10 +102,6 @@ public class Person extends Model implements Comparable<Person> {
 
     public void setContactable(boolean contactable) {
         this.contactable = contactable;
-    }
-
-    public void setFocused(boolean focused) {
-        this.focused = focused;
     }
 
     public void setPriority(int priority) {
@@ -124,7 +125,6 @@ public class Person extends Model implements Comparable<Person> {
         data.put(FIELD_FIRST_NAME, this.getFirstName());
         data.put(FIELD_LAST_NAME, this.getLastName());
         data.put(FIELD_CONTACTABLE, this.isContactable());
-        data.put(FIELD_FOCUSED, this.isFocused());
         data.put(FIELD_PRIORITY, this.getPriority());
         data.put(FIELD_GROUPS, this.getGroupsSerialized());
         data.put(FIELD_EMAIL, this.getEmail());
@@ -137,7 +137,6 @@ public class Person extends Model implements Comparable<Person> {
         person.setFirstName(data.getString(FIELD_FIRST_NAME));
         person.setLastName(data.getString(FIELD_LAST_NAME));
         person.setContactable(data.getBoolean(FIELD_CONTACTABLE));
-        person.setFocused(data.getBoolean(FIELD_FOCUSED));
         person.setPriority(data.getInteger(FIELD_PRIORITY));
         person.setGroups(deserializeGroups(data.get(FIELD_GROUPS,
                                                     List.class)));
@@ -156,9 +155,11 @@ public class Person extends Model implements Comparable<Person> {
 
         public static final String FIELD_GROUP_ID = "group_id";
         public static final String FIELD_ROLE = "role";
+        public static final String FIELD_FOCUSED = "focused";
 
         private ObjectId groupId;
         private String role;
+        private boolean focused;
 
         public PersonGroup() {
             super();
@@ -180,6 +181,10 @@ public class Person extends Model implements Comparable<Person> {
             return this.role;
         }
 
+        public boolean isFocused() {
+            return this.focused;
+        }
+
         public void setGroupId(ObjectId groupId) {
             this.groupId = groupId;
         }
@@ -188,10 +193,15 @@ public class Person extends Model implements Comparable<Person> {
             this.role = role;
         }
 
+        public void setFocused(boolean focused) {
+            this.focused = focused;
+        }
+
         @Override
         public Document serialize(Document data) {
             data.put(FIELD_GROUP_ID, this.getGroupId());
             data.put(FIELD_ROLE, this.getRole());
+            data.put(FIELD_FOCUSED, this.isFocused());
             return super.serialize(data);
         }
 
@@ -199,6 +209,7 @@ public class Person extends Model implements Comparable<Person> {
             PersonGroup group = new PersonGroup(data);
             group.setGroupId(data.getObjectId(FIELD_GROUP_ID));
             group.setRole(data.getString(FIELD_ROLE));
+            group.setFocused(data.getBoolean(FIELD_FOCUSED));
             return group;
         }
     }

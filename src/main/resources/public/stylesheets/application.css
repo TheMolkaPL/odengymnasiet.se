@@ -6,6 +6,8 @@ h1 {
     font-family: 'Nunito', sans-serif;
     font-size: 4rem;
     font-weight: 300;
+    color: #254A9F;
+    text-shadow: 0 1px 10px rgba(0,0,0,.5), 0 0 30px rgba(0,0,0,.1);
 }
 
 h2, h3, h4, h5, h6 {
@@ -15,10 +17,12 @@ h2, h3, h4, h5, h6 {
 
 h2 {
     font-size: 3rem;
+    color: #254A9F;
 }
 
 h3 {
     font-size: 2.5rem;
+    color: #254A9F;
 }
 
 h4 {

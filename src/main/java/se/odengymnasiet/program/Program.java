@@ -34,7 +34,7 @@ public class Program extends Model implements Comparable<Program> {
 
     @Override
     public int compareTo(Program o) {
-        int compare = Integer.compare(this.getPriority(), o.getPriority());
+        int compare = Integer.compare(o.getPriority(), this.getPriority());
         if (compare != 0) {
             return compare;
         }
