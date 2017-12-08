@@ -1,0 +1,3 @@
+[submodule "src/main/resources/public/logos"]
+	path = src/main/resources/public/logos
+	url = https://github.com/TheMolkaPL/odengymnasiet-logos
