@@ -1,10 +1,15 @@
 package se.odengymnasiet;
 
 import org.slf4j.Logger;
+import se.odengymnasiet.student.StudentService;
+import se.odengymnasiet.student.StudentServiceRepository;
 import spark.Request;
 import spark.Response;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public abstract class Controller<E extends Manifest> {
@@ -82,10 +87,18 @@ public abstract class Controller<E extends Manifest> {
             appNav = "index";
         }
 
+        StudentServiceRepository repository = this.manifest.getApplication()
+                .getRepositories().of(StudentServiceRepository.class);
+
+        List<StudentService> studentServices =
+                new ArrayList<>(repository.findNavbar());
+        Collections.sort(studentServices);
+
         Attributes layoutAttributes = Attributes.create()
                 .add("title", title)
                 .add("body", this.render(view, attributes).trim())
                 .add("app_nav", appNav.toLowerCase())
+                .add("student_services", studentServices)
                 .add("admin", false); // TODO is admin?
 
         return this.render(LAYOUTS_DIRECTORY + "/" + layout, layoutAttributes);

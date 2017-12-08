@@ -10,12 +10,14 @@ public class User extends Model {
     public static final String FIELD_EMAIL = "email";
     public static final String FIELD_PASSWORD = "password";
     public static final String FIELD_PASSWORD_SALT = "password_salt";
+    public static final String FIELD_ROOT = "root";
     public static final String FIELD_SUSPENDED = "suspended";
 
     private ObjectId personId;
     private String email;
     private char[] password;
     private char[] passwordSalt;
+    private boolean root;
     private boolean suspended;
 
     public User() {
@@ -46,6 +48,10 @@ public class User extends Model {
         return this.passwordSalt;
     }
 
+    public boolean isRoot() {
+        return this.root;
+    }
+
     public boolean isSuspended() {
         return this.suspended;
     }
@@ -66,6 +72,10 @@ public class User extends Model {
         this.passwordSalt = passwordSalt;
     }
 
+    public void setRoot(boolean root) {
+        this.root = root;
+    }
+
     public void setSuspended(boolean suspended) {
         this.suspended = suspended;
     }
@@ -76,6 +86,7 @@ public class User extends Model {
         data.put(FIELD_EMAIL, this.getEmail());
         data.put(FIELD_PASSWORD, String.valueOf(this.getPassword()));
         data.put(FIELD_PASSWORD_SALT, String.valueOf(this.getPasswordSalt()));
+        data.put(FIELD_ROOT, this.isRoot());
         data.put(FIELD_SUSPENDED, this.isSuspended());
         return super.serialize(data);
     }
@@ -86,6 +97,7 @@ public class User extends Model {
         user.setEmail(data.getString(FIELD_EMAIL));
         user.setPassword(data.getString(FIELD_PASSWORD).toCharArray());
         user.setPasswordSalt(data.getString(FIELD_PASSWORD_SALT).toCharArray());
+        user.setRoot(data.getBoolean(FIELD_ROOT));
         user.setSuspended(data.getBoolean(FIELD_SUSPENDED));
         return user;
     }

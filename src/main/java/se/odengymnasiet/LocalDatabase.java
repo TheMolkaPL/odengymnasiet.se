@@ -5,6 +5,7 @@ import se.odengymnasiet.contact.GroupRepository;
 import se.odengymnasiet.contact.PersonRepository;
 import se.odengymnasiet.index.MarketingRepository;
 import se.odengymnasiet.program.ProgramRepository;
+import se.odengymnasiet.student.StudentServiceRepository;
 import se.odengymnasiet.user.UserRepository;
 
 import java.util.Arrays;
@@ -31,6 +32,7 @@ public class LocalDatabase extends Database {
                 MarketingRepository.LOCAL,
                 PersonRepository.LOCAL,
                 ProgramRepository.LOCAL,
+                StudentServiceRepository.LOCAL,
                 UserRepository.LOCAL
         ).forEach(consumer::accept);
     }

@@ -70,4 +70,10 @@ public abstract class Model implements DocumentSerializable {
         data.put(FIELD_UPDATED_AT, this.getUpdatedAt());
         return data;
     }
+
+    public static Document filterUpdate(Document update) {
+        update.remove(FIELD_ID); // _id is unique and cannot be updated
+        update.put(FIELD_UPDATED_AT, Instant.now());
+        return update;
+    }
 }

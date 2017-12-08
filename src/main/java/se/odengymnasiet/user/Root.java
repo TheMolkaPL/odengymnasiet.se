@@ -7,6 +7,7 @@ import se.odengymnasiet.contact.Person;
 import java.util.Collections;
 import java.util.List;
 
+@Deprecated
 public class Root extends User {
 
     public static final ObjectId USER_ID =

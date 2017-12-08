@@ -28,7 +28,7 @@
             <nav class="navbar navbar-expand-lg navbar-light bg-ligt">
                 <div class="container">
                     <a class="navbar-brand" href="/" style="color: #254A9F;">
-                        <object type="image/svg+xml" data="/odengymnasiet-logo-classic.svg" width="30" height="30" class="d-inline-block align-top"></object>
+                        <object type="image/svg+xml" data="/logos/svg/color/odengymnasiet-icon-color.svg" width="30" height="30" class="d-inline-block align-top"></object>
                         Odengymnasiet
                     </a>
 
@@ -41,19 +41,29 @@
                             <li class="nav-item">
                                 <a class="nav-link <#if app_nav == "about">active</#if>" href="/about">Om skolan</a>
                             </li>
+
                             <li class="nav-item">
                                 <a class="nav-link <#if app_nav == "programs">active</#if>" href="/programs">Våra utbildningar</a>
                             </li>
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle <#if app_nav == "students">active</#if>" href="/students" id="navbarStudentsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">För elever</a>
-                                <div class="dropdown-menu" aria-labelledby="navbarStudentsDropdown">
-                                    <a class="dropdown-item" href="//mail.aprendere.se" target="_blank" rel="noopener">E-post</a>
-                                    <a class="dropdown-item" href="//facebook.com/odengymnasiet" target="_blank" rel="noopener">Facebook</a>
-                                    <a class="dropdown-item" href="//sms.schoolsoft.se/aprendere" target="_blank" rel="noopener">SchoolSoft</a>
-                                    <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="/students">Mer...</a>
-                                </div>
-                            </li>
+
+                            <#if student_services?size gt 0>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle <#if app_nav == "students">active</#if>" href="/students" id="navbarStudentsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">För elever</a>
+                                    <div class="dropdown-menu" aria-labelledby="navbarStudentsDropdown">
+                                        <#list student_services as service>
+                                            <a class="dropdown-item" href="${service.url}" target="_blank" rel="noopener">${service.name}</a>
+                                        </#list>
+
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" href="/students">Mer...</a>
+                                    </div>
+                                </li>
+                            <#else>
+                                <li class="nav-item">
+                                    <a class="nav-link <#if app_nav == "students">active</#if>" href="/students">För elever</a>
+                                </li>
+                            </#if>
+
                             <li class="nav-item">
                                 <a class="nav-link <#if app_nav == "contact">active</#if>" href="/contact">Kontakt</a>
                             </li>

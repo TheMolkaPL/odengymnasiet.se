@@ -50,7 +50,7 @@
                     <div class="fb-page"
                          data-href="https://www.facebook.com/odengymnasiet"
                          data-width="500"
-                         data-height="1000"
+                         data-height="1024"
                          data-tabs="timeline"
                          data-hide-cover="true"
                          data-show-facepile="false"

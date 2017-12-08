@@ -10,9 +10,11 @@
             <#if navigation_now == "feedback">active</#if>" href="/students/feedback">Synpunkter och klagomål</a>
     </div>
 
-    <div class="list-group">
-        <a class="list-group-item list-group-item-action" href="//mail.aprendere.se">E-post</a>
-        <a class="list-group-item list-group-item-action" href="//facebook.com/odengymnasiet">Facebook</a>
-        <a class="list-group-item list-group-item-action" href="//sms.schoolsoft.se/aprendere">SchoolSoft</a>
-    </div>
+    <#if student_services?size gt 0>
+        <div class="list-group">
+            <#list student_services as service>
+                <a class="list-group-item list-group-item-action" href="${service.url}" target="_blank" rel="noopener">${service.name}</a>
+            </#list>
+        </div>
+    </#if>
 </section>

@@ -4,7 +4,6 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
-import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 import se.odengymnasiet.Model;
 import se.odengymnasiet.Repository;
@@ -12,7 +11,7 @@ import se.odengymnasiet.Repository;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import static com.mongodb.client.model.Filters.*;
+import static com.mongodb.client.model.Filters.eq;
 
 public abstract class MongoRepository<E extends Model>
         implements Repository<E> {
@@ -63,8 +62,9 @@ public abstract class MongoRepository<E extends Model>
 
     @Override
     public void update(E model) {
-        Bson update = new BasicDBObject("$set", this.serialize(model));
-        this.collection.updateOne(eq(model.getId()), update);
+        Document update = Model.filterUpdate(this.serialize(model));
+        this.collection.updateOne(eq(model.getId()),
+                new BasicDBObject("$set", update));
     }
 
     @Override
