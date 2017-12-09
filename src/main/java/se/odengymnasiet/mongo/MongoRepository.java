@@ -11,7 +11,7 @@ import se.odengymnasiet.Repository;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import static com.mongodb.client.model.Filters.eq;
+import static com.mongodb.client.model.Filters.*;
 
 public abstract class MongoRepository<E extends Model>
         implements Repository<E> {

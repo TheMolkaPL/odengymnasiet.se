@@ -4,6 +4,8 @@ import org.bson.types.ObjectId;
 import se.odengymnasiet.Application;
 import se.odengymnasiet.Attributes;
 import se.odengymnasiet.Controller;
+import se.odengymnasiet.index.Article;
+import se.odengymnasiet.index.ArticleRepository;
 import se.odengymnasiet.route.HttpRoute;
 import spark.Request;
 import spark.Response;
@@ -16,6 +18,7 @@ import java.util.Map;
 
 public class ContactController extends Controller<ContactManifest> {
 
+    private final ArticleRepository articleRepository;
     private final GroupRepository groupRepository;
     private final PersonRepository personRepository;
 
@@ -25,13 +28,21 @@ public class ContactController extends Controller<ContactManifest> {
                              Response response) {
         super(app, manifest, request, response);
 
+        this.articleRepository = manifest.getArticleRepository();
         this.groupRepository = manifest.getGroupRepository();
         this.personRepository = manifest.getPersonRepository();
     }
 
     @HttpRoute("/")
     public Object index() {
-        return this.ok("contact/index", Attributes.create(), "Kontakt");
+        Article article = this.articleRepository.findByPath("contact");
+        if (article == null) {
+            article = Article.NULL;
+        }
+
+        Attributes attributes = Attributes.create()
+                .add("article", article);
+        return this.ok("contact/index", attributes, "Kontakt");
     }
 
     @HttpRoute("/staff")
@@ -45,6 +56,11 @@ public class ContactController extends Controller<ContactManifest> {
             @Override
             public String getName() {
                 return null;
+            }
+
+            @Override
+            public String getRoleName() {
+                return "Funktion";
             }
 
             @Override
@@ -135,26 +151,24 @@ public class ContactController extends Controller<ContactManifest> {
 
         @Override
         public int compareTo(GroupView o) {
-            if (this.getName() == null) {
+            String thisName = this.getGroup().getName();
+            String thatName = o.getGroup().getName();
+
+            if (thisName == null) {
                 return Integer.MIN_VALUE;
-            } else if (o.getName() == null) {
+            } else if (thatName == null) {
                 return Integer.MAX_VALUE;
             } else {
-                return this.getName().compareToIgnoreCase(o.getName());
+                return thisName.compareToIgnoreCase(thatName);
             }
         }
 
-        public String getName() {
-            return this.group.getName();
+        public Group getGroup() {
+            return this.group;
         }
 
         public List<PersonGroupRelation> getPersons() {
             return this.persons;
         }
-    }
-
-    @HttpRoute("/application")
-    public Object application() {
-        return this.ok("contact/application", Attributes.create(), "Ansökan");
     }
 }

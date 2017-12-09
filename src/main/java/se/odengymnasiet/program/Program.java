@@ -4,6 +4,11 @@ import org.bson.Document;
 import org.bson.types.ObjectId;
 import se.odengymnasiet.Model;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class Program extends Model implements Comparable<Program> {
 
     public static final String FIELD_TITLE = "title";
@@ -12,6 +17,9 @@ public class Program extends Model implements Comparable<Program> {
     public static final String FIELD_ICON = "icon";
     public static final String FIELD_DESCRIPTION = "description";
     public static final String FIELD_PRIORITY = "priority";
+    public static final String FIELD_MARKETING = "marketing";
+    public static final String FIELD_OPEN = "open";
+    public static final String FIELD_FILES = "files";
 
     private String title;
     private String subtitle;
@@ -19,6 +27,9 @@ public class Program extends Model implements Comparable<Program> {
     private String icon;
     private String description;
     private int priority;
+    private String marketing;
+    private boolean open;
+    private List<ProgramFile> files;
 
     public Program() {
         super();
@@ -66,6 +77,18 @@ public class Program extends Model implements Comparable<Program> {
         return this.priority;
     }
 
+    public String getMarketing() {
+        return this.marketing;
+    }
+
+    public List<ProgramFile> getFiles() {
+        return this.files;
+    }
+
+    public boolean isOpen() {
+        return this.open;
+    }
+
     public void setTitle(String title) {
         this.title = title;
     }
@@ -90,6 +113,18 @@ public class Program extends Model implements Comparable<Program> {
         this.priority = priority;
     }
 
+    public void setMarketing(String marketing) {
+        this.marketing = marketing;
+    }
+
+    public void setOpen(boolean open) {
+        this.open = open;
+    }
+
+    public void setFiles(List<ProgramFile> files) {
+        this.files = files;
+    }
+
     @Override
     public Document serialize(Document data) {
         data.put(FIELD_TITLE, this.getTitle());
@@ -98,6 +133,9 @@ public class Program extends Model implements Comparable<Program> {
         data.put(FIELD_ICON, this.getIcon());
         data.put(FIELD_DESCRIPTION, this.getDescription());
         data.put(FIELD_PRIORITY, this.getPriority());
+        data.put(FIELD_MARKETING, this.getMarketing());
+        data.put(FIELD_OPEN, true);
+        data.put(FIELD_FILES, this.getFiles());
         return super.serialize(data);
     }
 
@@ -109,6 +147,18 @@ public class Program extends Model implements Comparable<Program> {
         program.setIcon(data.getString(FIELD_ICON));
         program.setDescription(data.getString(FIELD_DESCRIPTION));
         program.setPriority(data.getInteger(FIELD_PRIORITY));
+        program.setMarketing(data.getString(FIELD_MARKETING));
+        program.setOpen(data.getBoolean(FIELD_OPEN));
+        program.setFiles((List<ProgramFile>) data
+                .get(FIELD_FILES, ArrayList.class).stream()
+                .map(o -> ProgramFile.deserialize((Document) o))
+                .sorted(new Comparator<ProgramFile>() {
+                    @Override
+                    public int compare(ProgramFile o1, ProgramFile o2) {
+                        return o1.compareTo(o2);
+                    }
+                })
+                .collect(Collectors.toList()));
         return program;
     }
 }

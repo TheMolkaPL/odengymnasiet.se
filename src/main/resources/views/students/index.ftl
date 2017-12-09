@@ -6,8 +6,8 @@
     </div>
 </div>
 
-<article>
-    <div class="container">
+<div class="container">
+    <article>
         <div class="row">
             <div class="col-md-9">
                 <section>
@@ -22,5 +22,5 @@
                 </aside>
             </div>
         </div>
-    </div>
-</article>
+    </article>
+</div>

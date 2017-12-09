@@ -10,7 +10,7 @@ import se.odengymnasiet.mongo.MongoRepository;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import static com.mongodb.client.model.Filters.eq;
+import static com.mongodb.client.model.Filters.*;
 
 @MongoCollectionName("student_services")
 @RepositoryHandler(StudentServiceRepository.class)

@@ -7,9 +7,11 @@ import se.odengymnasiet.Model;
 public class Group extends Model implements Comparable<Group> {
 
     public static final String FIELD_NAME = "name";
+    public static final String FIELD_ROLE_NAME = "role_name";
     public static final String FIELD_PRIORITY = "priority";
 
     private String name;
+    private String roleName;
     private int priority;
 
     public Group() {
@@ -38,12 +40,20 @@ public class Group extends Model implements Comparable<Group> {
         return this.name;
     }
 
+    public String getRoleName() {
+        return this.roleName;
+    }
+
     public int getPriority() {
         return this.priority;
     }
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
     }
 
     public void setPriority(int priority) {
@@ -53,6 +63,7 @@ public class Group extends Model implements Comparable<Group> {
     @Override
     public Document serialize(Document data) {
         data.put(FIELD_NAME, this.getName());
+        data.put(FIELD_ROLE_NAME, this.getRoleName());
         data.put(FIELD_PRIORITY, this.getPriority());
         return super.serialize(data);
     }
@@ -60,6 +71,7 @@ public class Group extends Model implements Comparable<Group> {
     public static Group deserialize(Document data) {
         Group group = new Group(data);
         group.setName(data.getString(FIELD_NAME));
+        group.setRoleName(data.getString(FIELD_ROLE_NAME));
         group.setPriority(data.getInteger(FIELD_PRIORITY));
         return group;
     }

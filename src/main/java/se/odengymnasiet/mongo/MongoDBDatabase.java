@@ -9,8 +9,10 @@ import se.odengymnasiet.Database;
 import se.odengymnasiet.Repository;
 import se.odengymnasiet.contact.MongoGroupRepository;
 import se.odengymnasiet.contact.MongoPersonRepository;
+import se.odengymnasiet.index.MongoArticleRepository;
 import se.odengymnasiet.index.MongoMarketingRepository;
 import se.odengymnasiet.program.MongoProgramRepository;
+import se.odengymnasiet.student.MongoFalafelRepository;
 import se.odengymnasiet.student.MongoStudentServiceRepository;
 import se.odengymnasiet.user.MongoUserRepository;
 
@@ -46,6 +48,8 @@ public class MongoDBDatabase extends Database {
     @Override
     public void installDefaultRepositories(Consumer<Repository> consumer) {
         Arrays.asList(
+                MongoArticleRepository.class,
+                MongoFalafelRepository.class,
                 MongoGroupRepository.class,
                 MongoMarketingRepository.class,
                 MongoPersonRepository.class,

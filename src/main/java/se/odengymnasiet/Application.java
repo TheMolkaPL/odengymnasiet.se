@@ -102,15 +102,25 @@ public final class Application implements SparkApplication {
 
         http.initExceptionHandler((e) -> {
             this.logger.error("Exception caught: " + e.getMessage(), e);
-            System.exit(-1);
+            System.exit(-1); // I'm not sure about this.
         });
 
         http.notFound((request, response) -> {
-            return response.status();
+            ErrorPage errorPage = new ErrorPage(this);
+            errorPage.setCode(response.status());
+            errorPage.setMessage(ErrorPage.MESSAGE_NOT_FOUND);
+
+            response.body(errorPage.render());
+            return response.body();
         });
 
         http.internalServerError((request, response) -> {
-            return response.status();
+            ErrorPage errorPage = new ErrorPage(this);
+            errorPage.setCode(response.status());
+            errorPage.setMessage(ErrorPage.MESSAGE_INTERNAL_ERROR);
+
+            response.body(errorPage.render());
+            return response.body();
         });
 
         http.init();

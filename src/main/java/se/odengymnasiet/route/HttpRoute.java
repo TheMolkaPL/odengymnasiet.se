@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 public @interface HttpRoute {
 
-    RequestMethod[] methods() default RequestMethod.GET;
-
     String value();
+
+    RequestMethod[] methods() default RequestMethod.GET;
 }

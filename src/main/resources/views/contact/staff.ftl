@@ -6,15 +6,15 @@
     </div>
 </div>
 
-<article>
-    <div class="container">
-        <div class="row">
-            <div class="col-md-9">
+<div class="container">
+    <div class="row">
+        <div class="col-md-9">
+            <article>
                 <#list groups as group>
                     <section>
-                        <#if group.name??>
+                        <#if group.group.name??>
                             <header style="margin-top: 40px; margin-bottom: 20px;">
-                                <h3>${group.name}</h3>
+                                <h3>${group.group.name}</h3>
                             </header>
                         </#if>
 
@@ -22,9 +22,9 @@
                             <thead>
                                 <tr>
                                     <td scope="col">Namn</td>
-                                    <td scope="col">Funktion</td>
-                                    <td scope="col">E-post</td>
-                                    <td scope="col" style="width: 140px;">Telefon</td>
+                                    <td scope="col">${group.group.roleName}</td>
+                                    <td scope="col">E-postadress</td>
+                                    <td scope="col" style="width: 140px;">Telefonnummer</td>
                                 </tr>
                             </thead>
 
@@ -42,14 +42,14 @@
                         </table>
                     </section>
                 </#list>
-            </div>
+            </article>
+        </div>
 
-            <div class="col-md-3">
-                <aside>
-                    <#assign navigation_now = "staff">
-                    <#include "navigation.ftl">
-                </aside>
-            </div>
+        <div class="col-md-3">
+            <aside>
+                <#assign navigation_now = "staff">
+                <#include "navigation.ftl">
+            </aside>
         </div>
     </div>
-</article>
+</div>
