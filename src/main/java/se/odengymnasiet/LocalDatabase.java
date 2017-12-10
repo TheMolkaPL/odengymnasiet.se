@@ -5,6 +5,7 @@ import se.odengymnasiet.contact.GroupRepository;
 import se.odengymnasiet.contact.PersonRepository;
 import se.odengymnasiet.index.ArticleRepository;
 import se.odengymnasiet.index.MarketingRepository;
+import se.odengymnasiet.openhouse.OpenHouseRepository;
 import se.odengymnasiet.program.ProgramRepository;
 import se.odengymnasiet.student.FalafelRepository;
 import se.odengymnasiet.student.StudentServiceRepository;
@@ -34,6 +35,7 @@ public class LocalDatabase extends Database {
                 FalafelRepository.LOCAL,
                 GroupRepository.LOCAL,
                 MarketingRepository.LOCAL,
+                OpenHouseRepository.LOCAL,
                 PersonRepository.LOCAL,
                 ProgramRepository.LOCAL,
                 StudentServiceRepository.LOCAL,

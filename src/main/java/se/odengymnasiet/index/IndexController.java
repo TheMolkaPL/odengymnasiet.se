@@ -4,6 +4,10 @@ import org.bson.types.ObjectId;
 import se.odengymnasiet.Application;
 import se.odengymnasiet.Attributes;
 import se.odengymnasiet.Controller;
+import se.odengymnasiet.openhouse.OpenHouse;
+import se.odengymnasiet.openhouse.OpenHouseRepository;
+import se.odengymnasiet.program.Program;
+import se.odengymnasiet.program.ProgramRepository;
 import se.odengymnasiet.route.HttpRoute;
 import se.odengymnasiet.student.Falafel;
 import se.odengymnasiet.student.FalafelRepository;
@@ -12,7 +16,6 @@ import spark.Response;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.temporal.WeekFields;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -24,6 +27,8 @@ public class IndexController extends Controller<IndexManifest> {
     private final ArticleRepository articleRepository;
     private final FalafelRepository falafelRepository;
     private final MarketingRepository marketingRepository;
+    private final OpenHouseRepository openHouseRepository;
+    private final ProgramRepository programRepository;
 
     public IndexController(Application app,
                            IndexManifest manifest,
@@ -34,13 +39,16 @@ public class IndexController extends Controller<IndexManifest> {
         this.articleRepository = manifest.getArticleRepository();
         this.falafelRepository = manifest.getFalafelRepository();
         this.marketingRepository = manifest.getMarketingRepository();
+        this.openHouseRepository = manifest.getOpenHouseRepository();
+        this.programRepository = manifest.getProgramRepository();
     }
 
     @HttpRoute("/")
     public Object index() {
-        Collection<Marketing> collection =
-                this.marketingRepository.findAllDeployed();
+        Collection<Marketing> collection = new ArrayList<>(
+                this.marketingRepository.findAllDeployed());
 
+        // marketing
         Marketing marketing = null;
         if (!collection.isEmpty()) {
             marketing = collection.stream()
@@ -48,13 +56,25 @@ public class IndexController extends Controller<IndexManifest> {
                     .findFirst().get();
         }
 
+        // programs
+        List<Program> programs = new ArrayList<>(
+                this.programRepository.findAllRecommended());
+        Collections.sort(programs);
+
+        // open houses
+        List<OpenHouse> openHouses = new ArrayList<>(
+                this.openHouseRepository.findAllDeployedComing());
+        Collections.sort(openHouses);
+
+        // falafels
         LocalDate now = LocalDate.now();
         int year = now.getYear();
-        int week = now.get(WeekFields.ISO.weekOfWeekBasedYear());
-        List<Falafel> falafels = new ArrayList<>(this.falafelRepository
-                .findFor(year, week));
+        int week = now.get(Falafel.WEEK_FIELD);
+        List<Falafel> falafels = new ArrayList<>(
+                this.falafelRepository.findAllFor(year, week));
 
-        List<DayOfWeek> days = Arrays.asList(DayOfWeek.values());
+        List<DayOfWeek> days = new ArrayList<>(
+                Arrays.asList(DayOfWeek.values()));
         falafels.forEach(day -> days.remove(day.getDay()));
         days.forEach(dayOfWeek -> {
             if (dayOfWeek.equals(DayOfWeek.SATURDAY) ||
@@ -75,13 +95,15 @@ public class IndexController extends Controller<IndexManifest> {
 
         Attributes attributes = Attributes.create()
                 .add("marketing", marketing)
+                .add("programs", programs)
+                .add("openHouses", openHouses)
                 .add("falafels", falafels);
         return this.ok("index", attributes, null);
     }
 
     @HttpRoute("/about")
     public Object about() {
-        Article article = this.articleRepository.findByPath("about");
+        Article article = this.articleRepository.findByPath(ArticlePaths.ABOUT);
         if (article == null) {
             article = Article.NULL;
         }

@@ -29,7 +29,7 @@ public class MongoStudentServiceRepository
     }
 
     @Override
-    public Collection<StudentService> findNavbar() {
+    public Collection<StudentService> findAllForNavbar() {
         return this.getCollection().find(eq(StudentService.FIELD_NAVBAR, true))
                 .map(this::deserialize)
                 .into(new ArrayList<>());

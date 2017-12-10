@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import se.odengymnasiet.admin.AdminManifest;
 import se.odengymnasiet.contact.ContactManifest;
 import se.odengymnasiet.index.IndexManifest;
+import se.odengymnasiet.openhouse.OpenHouseManifest;
 import se.odengymnasiet.program.ProgramsManifest;
 import se.odengymnasiet.route.RequestMethod;
 import se.odengymnasiet.route.RouteExecutorContainer;
@@ -335,6 +336,7 @@ public final class Application implements SparkApplication {
                 AdminManifest.class,
                 ContactManifest.class,
                 IndexManifest.class,
+                OpenHouseManifest.class,
                 ProgramsManifest.class,
                 StudentsManifest.class
         ).forEach(manifest -> this.getManifests().registerManifest(manifest));

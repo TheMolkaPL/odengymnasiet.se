@@ -31,6 +31,10 @@
     <div class="row">
         <div class="col-lg-9">
             <article class="text-justify">
+                <header>
+                    <h3>Expedition</h3>
+                </header>
+
                 ${article.text}
             </article>
         </div>

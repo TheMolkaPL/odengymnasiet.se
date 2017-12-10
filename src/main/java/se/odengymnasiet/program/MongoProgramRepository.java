@@ -7,6 +7,9 @@ import se.odengymnasiet.RepositoryHandler;
 import se.odengymnasiet.mongo.MongoCollectionName;
 import se.odengymnasiet.mongo.MongoRepository;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import static com.mongodb.client.model.Filters.*;
 
 @MongoCollectionName("programs")
@@ -22,6 +25,20 @@ public class MongoProgramRepository extends MongoRepository<Program>
     @Override
     public Program deserialize(Document data) {
         return Program.deserialize(data);
+    }
+
+    @Override
+    public Collection<Program> findAllOpen() {
+        return this.getCollection().find(eq(Program.FIELD_OPEN, true))
+                .map(this::deserialize)
+                .into(new ArrayList<>());
+    }
+
+    @Override
+    public Collection<Program> findAllRecommended() {
+        return this.getCollection().find(eq(Program.FIELD_RECOMMENDED, true))
+                .map(this::deserialize)
+                .into(new ArrayList<>());
     }
 
     @Override

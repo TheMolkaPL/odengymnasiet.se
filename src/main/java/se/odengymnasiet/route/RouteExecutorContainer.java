@@ -3,20 +3,20 @@ package se.odengymnasiet.route;
 import se.odengymnasiet.Application;
 
 import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.Set;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 public class RouteExecutorContainer {
 
     private final Application application;
 
-    private final Map<String, RouteExecutor> container;
+    private final SortedMap<String, RouteExecutor> container;
 
     public RouteExecutorContainer(Application app) {
         this.application = app;
 
-        this.container = new LinkedHashMap<>();
+        this.container = new TreeMap<>();
     }
 
     public boolean install(String path, RouteExecutor executor) {

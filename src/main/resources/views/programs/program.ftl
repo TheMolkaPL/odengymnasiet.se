@@ -26,33 +26,58 @@
                     <a class="nav-item nav-link<#if cur_page == "efter-gymnasiet"> active</#if>" href="/programs/${program.path}/efter-gymnasiet">Efter gymnasiet</a>
                 </nav>
 
-                <article class="text-justify">
+                <article class="text-justify" id="article-content">
                     ${article.text}
                 </article>
             </div>
 
             <div class="col-md-4">
-                <#if program.open>
-                    <a class="btn btn-success btn-lg btn-block" href="/programs/${program.path}/application">Anmälan</a>
-                <#else>
-                    <a class="btn btn-outline-danger btn-lg btn-block disabled" href="/programs/${program.path}">Anmälan är stängd</a>
-                </#if>
+                <aside>
+                    <#if program.open>
+                        <a class="btn btn-success btn-lg btn-block" href="/programs/${program.path}/application">Anmälan</a>
+                    <#else>
+                        <a class="btn btn-outline-danger btn-lg btn-block disabled" href="/programs/${program.path}">Anmälan är stängd</a>
+                    </#if>
 
-                <#if program.files?size gt 0>
-                    <div class="card bg-light" style="margin-top: 32px;">
-                        <div class="card-header">Dokument</div>
+                    <#if program.files?size gt 0>
+                        <div class="card bg-light" style="margin-top: 32px;">
+                            <div class="card-header">Dokument</div>
 
-                        <div class="list-group list-group-flush">
-                            <#list program.files as file>
-                                <div class="list-group-item">
-                                    <small class="text-dark">${file.format?upper_case}</small>
-                                    <a href="${file.url}" target="_blank" rel="noopener">${file.name}</a>
-                                    <small class="text-muted">${file.size}MB</small>
-                                </div>
-                            </#list>
+                            <div class="list-group list-group-flush">
+                                <#list program.files as file>
+                                    <div class="list-group-item">
+                                        <small class="text-dark">${file.format?upper_case}</small>
+                                        <a href="${file.url}" target="_blank" rel="noopener">${file.name}</a>
+                                        <small class="text-muted">${file.size}MB</small>
+                                    </div>
+                                </#list>
+                            </div>
                         </div>
-                    </div>
-                </#if>
+                    </#if>
+
+                    <#if openHouses?size gt 0>
+                        <div class="card bg-light border-success" style="margin-top: 32px;">
+                            <div class="card-header">Kommande öppet hus</div>
+
+                            <div class="list-group list-group-flush">
+                                <#list openHouses as openHouse>
+                                    <#assign startTime = openHouse.startTime>
+                                    <#if openHouse.notEnding>
+                                        <#assign time = "börjar " + startTime.hour + ":" + startTime.minute>
+                                    <#else>
+                                        <#assign endTime = openHouse.endTime>
+                                        <#assign time = startTime.hour + ":" + startTime.minute + " - " + endTime.hour + ":" + endTime.minute>
+                                    </#if>
+
+                                    <a class="list-group-item list-group-item-action" href="/open-house/${openHouse.id}">
+                                        <span class="text-dark">${startTime.dayOfMonth}/${startTime.monthValue} ${startTime.year?c}</span>
+                                        <span class="float-right text-muted">${time}</span>
+                                    </a>
+                                </#list>
+                            </div>
+                        </div>
+                    </#if>
+                </aside>
             </div>
         </div>
     </article>

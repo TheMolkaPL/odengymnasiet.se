@@ -5,6 +5,7 @@ import se.odengymnasiet.student.StudentService;
 import se.odengymnasiet.student.StudentServiceRepository;
 import spark.Request;
 import spark.Response;
+import spark.Session;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -13,6 +14,8 @@ import java.util.List;
 import java.util.Map;
 
 public abstract class Controller<E extends Manifest> {
+
+    public static final String SESSION_ATTRIBUTE_ADMIN = "is_admin";
 
     private final Application application;
 
@@ -91,15 +94,24 @@ public abstract class Controller<E extends Manifest> {
                 .getRepositories().of(StudentServiceRepository.class);
 
         List<StudentService> studentServices =
-                new ArrayList<>(repository.findNavbar());
+                new ArrayList<>(repository.findAllForNavbar());
         Collections.sort(studentServices);
+
+        boolean admin = false;
+        Session session = this.getRequest().session(false);
+        if (session != null) {
+            Boolean value = session.attribute(SESSION_ATTRIBUTE_ADMIN);
+            if (value != null && value.equals(Boolean.TRUE)) {
+                admin = true;
+            }
+        }
 
         Attributes layoutAttributes = Attributes.create()
                 .add("title", title)
                 .add("body", this.render(view, attributes).trim())
                 .add("app_nav", appNav.toLowerCase())
                 .add("student_services", studentServices)
-                .add("admin", false); // TODO is admin?
+                .add("admin", admin);
 
         return this.render(LAYOUTS_DIRECTORY + "/" + layout, layoutAttributes);
     }

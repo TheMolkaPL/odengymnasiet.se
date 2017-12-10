@@ -6,6 +6,7 @@ import se.odengymnasiet.Model;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.temporal.TemporalField;
 import java.time.temporal.WeekFields;
 import java.util.Collections;
 import java.util.List;
@@ -13,6 +14,11 @@ import java.util.List;
 public class Falafel extends Model implements Comparable<Falafel> {
 
     public static final Falafel NULL = new NullFalafel();
+
+    public static final WeekFields WEEK_FIELDS = WeekFields.ISO;
+    public static final TemporalField WEEK_FIELD =
+            WEEK_FIELDS.weekOfWeekBasedYear();
+    public static final TemporalField DAY_FIELD = WEEK_FIELDS.dayOfWeek();
 
     public static final String FIELD_YEAR = "year";
     public static final String FIELD_WEEK = "week";
@@ -80,12 +86,17 @@ public class Falafel extends Model implements Comparable<Falafel> {
         return this.dishes;
     }
 
+    public LocalDate getLocalDate() {
+        return LocalDate.now().withYear(this.getYear())
+                              .with(WEEK_FIELD, this.getWeek())
+                              .with(DAY_FIELD, this.getDay().getValue());
+    }
+
     public boolean isToday() {
         LocalDate now = LocalDate.now();
-        int week = now.get(WeekFields.ISO.weekOfWeekBasedYear());
 
         return this.getYear() == now.getYear() &&
-                this.getWeek() == week &&
+                this.getWeek() == now.get(WEEK_FIELD) &&
                 this.getDay().equals(now.getDayOfWeek());
     }
 
@@ -134,7 +145,7 @@ class NullFalafel extends Falafel {
 
     @Override
     public int getWeek() {
-        return this.now().get(WeekFields.ISO.weekOfWeekBasedYear());
+        return this.now().get(WEEK_FIELD);
     }
 
     @Override
@@ -145,6 +156,11 @@ class NullFalafel extends Falafel {
     @Override
     public List<String> getDishes() {
         return Collections.emptyList();
+    }
+
+    @Override
+    public LocalDate getLocalDate() {
+        return this.now();
     }
 
     private LocalDate now() {

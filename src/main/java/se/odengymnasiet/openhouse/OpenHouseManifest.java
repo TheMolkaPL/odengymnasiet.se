@@ -1,43 +1,31 @@
-package se.odengymnasiet.index;
+package se.odengymnasiet.openhouse;
 
 import se.odengymnasiet.Manifest;
 import se.odengymnasiet.ManifestInfo;
 import se.odengymnasiet.RepositoryContainer;
-import se.odengymnasiet.openhouse.OpenHouseRepository;
+import se.odengymnasiet.index.ArticleRepository;
+import se.odengymnasiet.index.IndexManifest;
 import se.odengymnasiet.program.ProgramRepository;
-import se.odengymnasiet.student.FalafelRepository;
 
-@Index
-@ManifestInfo(name = "Index",
+@ManifestInfo(name = "OpenHouse",
               parent = IndexManifest.class,
-              master = IndexController.class)
-public class IndexManifest extends Manifest<IndexController> {
+              master = OpenHouseController.class,
+              route = "/open-house")
+public class OpenHouseManifest extends Manifest<OpenHouseController> {
 
     private ArticleRepository articleRepository;
-    private FalafelRepository falafelRepository;
-    private MarketingRepository marketingRepository;
     private OpenHouseRepository openHouseRepository;
     private ProgramRepository programRepository;
 
     @Override
     public void installRepositories(RepositoryContainer repositories) {
         this.articleRepository = repositories.of(ArticleRepository.class);
-        this.falafelRepository = repositories.of(FalafelRepository.class);
-        this.marketingRepository = repositories.of(MarketingRepository.class);
         this.openHouseRepository = repositories.of(OpenHouseRepository.class);
         this.programRepository = repositories.of(ProgramRepository.class);
     }
 
     public ArticleRepository getArticleRepository() {
         return this.articleRepository;
-    }
-
-    public FalafelRepository getFalafelRepository() {
-        return this.falafelRepository;
-    }
-
-    public MarketingRepository getMarketingRepository() {
-        return this.marketingRepository;
     }
 
     public OpenHouseRepository getOpenHouseRepository() {

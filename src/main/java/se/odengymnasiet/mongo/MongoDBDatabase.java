@@ -11,6 +11,7 @@ import se.odengymnasiet.contact.MongoGroupRepository;
 import se.odengymnasiet.contact.MongoPersonRepository;
 import se.odengymnasiet.index.MongoArticleRepository;
 import se.odengymnasiet.index.MongoMarketingRepository;
+import se.odengymnasiet.openhouse.MongoOpenHouseRepository;
 import se.odengymnasiet.program.MongoProgramRepository;
 import se.odengymnasiet.student.MongoFalafelRepository;
 import se.odengymnasiet.student.MongoStudentServiceRepository;
@@ -52,6 +53,7 @@ public class MongoDBDatabase extends Database {
                 MongoFalafelRepository.class,
                 MongoGroupRepository.class,
                 MongoMarketingRepository.class,
+                MongoOpenHouseRepository.class,
                 MongoPersonRepository.class,
                 MongoProgramRepository.class,
                 MongoStudentServiceRepository.class,

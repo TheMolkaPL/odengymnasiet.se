@@ -73,28 +73,65 @@
         <div class="col-lg-7" style="margin-top: 64px;">
             <div class="row">
                 <div class="col-md-6">
+                    <#if programs?size gt 0>
+                        <div class="card border-secondary" style="margin-bottom: 30px;">
+                            <div class="card-header">Våra utbildningar</div>
 
+                            <div class="list-group list-group-flush">
+                                <#list programs as program>
+                                    <a class="list-group-item list-group-item-action text-<#if program.open>success<#else>danger</#if>" href="/programs/${program.path}">${program.title}</a>
+                                </#list>
+                            </div>
+                        </div>
+                    </#if>
+
+                    <#if openHouses?size gt 0>
+                        <div class="card border-secondary" style="margin-bottom: 30px;">
+                            <div class="card-header">Kommande öppet hus</div>
+
+                            <div class="list-group list-group-flush">
+                                <#list openHouses as openHouse>
+                                    <#assign startTime = openHouse.startTime>
+                                    <#if openHouse.notEnding>
+                                        <#assign time = "börjar " + startTime.hour + ":" + startTime.minute>
+                                    <#else>
+                                        <#assign endTime = openHouse.endTime>
+                                        <#assign time = startTime.hour + ":" + startTime.minute + " - " + endTime.hour + ":" + endTime.minute>
+                                    </#if>
+
+                                    <a class="list-group-item list-group-item-action" href="/open-house/${openHouse.id}">
+                                        <span class="text-dark">${startTime.dayOfMonth}/${startTime.monthValue} ${startTime.year?c}</span>
+                                        <span class="float-right text-muted">${time}</span>
+                                    </a>
+                                </#list>
+                            </div>
+                        </div>
+                    </#if>
                 </div>
 
                 <div class="col-md-6">
-                    <div class="card border-secondary">
-                        <div class="card-header">
-                            Matsedel
-                            <span class="float-right text-muted">vecka ${falafels?first.week}</span>
+                    <#if falafels?size gt 0>
+                        <div class="card border-secondary" style="margin-bottom: 30px;">
+                            <div class="card-header">
+                                Matsedel
+                                <span class="float-right text-muted">vecka ${falafels?first.week}/${falafels?last.year?c}</span>
+                            </div>
+
+                            <ul class="list-group list-group-flush">
+                                <#list falafels as falafel>
+                                    <#assign date = falafel.localDate>
+                                    <li class="list-group-item<#if falafel.today> active</#if>">
+                                        <small class="float-right<#if !falafel.today> text-muted</#if>">${date.dayOfMonth}/${date.monthValue}</small>
+                                        <h5>${falafel.dayName}</h5>
+
+                                        <#list falafel.dishes as dish>
+                                            <p class="mb-1">${dish}</p>
+                                        </#list>
+                                    </li>
+                                </#list>
+                            </ul>
                         </div>
-
-                        <ul class="list-group list-group-flush">
-                            <#list falafels as falafel>
-                                <li class="list-group-item<#if falafel.today> active</#if>">
-                                    <h5>${falafel.dayName}</h5>
-
-                                    <#list falafel.dishes as dish>
-                                        <p class="mb-1">${dish}</p>
-                                    </#list>
-                                </li>
-                            </#list>
-                        </ul>
-                    </div>
+                    </#if>
                 </div>
             </div>
         </div>

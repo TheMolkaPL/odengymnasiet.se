@@ -29,7 +29,7 @@ public class MongoFalafelRepository extends MongoRepository<Falafel>
     }
 
     @Override
-    public Collection<Falafel> findFor(int year, int week) {
+    public Collection<Falafel> findAllFor(int year, int week) {
         Bson where = and(eq(Falafel.FIELD_YEAR, year),
                          eq(Falafel.FIELD_WEEK, week));
 

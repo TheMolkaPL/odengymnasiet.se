@@ -11,7 +11,7 @@ public interface StudentServiceRepository extends Repository<StudentService> {
 
     StudentServiceRepository LOCAL = new LocalStudentServiceRepository();
 
-    Collection<StudentService> findNavbar();
+    Collection<StudentService> findAllForNavbar();
 }
 
 @RepositoryHandler(StudentServiceRepository.class)
@@ -19,7 +19,7 @@ class LocalStudentServiceRepository extends LocalRepository<StudentService>
                                     implements StudentServiceRepository {
 
     @Override
-    public Collection<StudentService> findNavbar() {
+    public Collection<StudentService> findAllForNavbar() {
         return this.container.values().stream()
                 .filter(StudentService::isNavbar)
                 .collect(Collectors.toList());

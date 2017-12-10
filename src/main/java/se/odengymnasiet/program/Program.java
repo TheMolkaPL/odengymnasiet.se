@@ -15,9 +15,9 @@ public class Program extends Model implements Comparable<Program> {
     public static final String FIELD_SUBTITLE = "subtitle";
     public static final String FIELD_PATH = "path";
     public static final String FIELD_ICON = "icon";
-    public static final String FIELD_DESCRIPTION = "description";
     public static final String FIELD_PRIORITY = "priority";
     public static final String FIELD_MARKETING = "marketing";
+    public static final String FIELD_RECOMMENDED = "recommended";
     public static final String FIELD_OPEN = "open";
     public static final String FIELD_FILES = "files";
 
@@ -25,9 +25,9 @@ public class Program extends Model implements Comparable<Program> {
     private String subtitle;
     private String path;
     private String icon;
-    private String description;
     private int priority;
     private String marketing;
+    private boolean recommended;
     private boolean open;
     private List<ProgramFile> files;
 
@@ -69,10 +69,6 @@ public class Program extends Model implements Comparable<Program> {
         return this.icon;
     }
 
-    public String getDescription() {
-        return this.description;
-    }
-
     public int getPriority() {
         return this.priority;
     }
@@ -83,6 +79,10 @@ public class Program extends Model implements Comparable<Program> {
 
     public List<ProgramFile> getFiles() {
         return this.files;
+    }
+
+    public boolean isRecommended() {
+        return this.recommended;
     }
 
     public boolean isOpen() {
@@ -105,16 +105,16 @@ public class Program extends Model implements Comparable<Program> {
         this.icon = icon;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public void setPriority(int priority) {
         this.priority = priority;
     }
 
     public void setMarketing(String marketing) {
         this.marketing = marketing;
+    }
+
+    public void setRecommended(boolean recommended) {
+        this.recommended = recommended;
     }
 
     public void setOpen(boolean open) {
@@ -131,10 +131,10 @@ public class Program extends Model implements Comparable<Program> {
         data.put(FIELD_SUBTITLE, this.getSubtitle());
         data.put(FIELD_PATH, this.getPath());
         data.put(FIELD_ICON, this.getIcon());
-        data.put(FIELD_DESCRIPTION, this.getDescription());
         data.put(FIELD_PRIORITY, this.getPriority());
         data.put(FIELD_MARKETING, this.getMarketing());
-        data.put(FIELD_OPEN, true);
+        data.put(FIELD_RECOMMENDED, this.isRecommended());
+        data.put(FIELD_OPEN, this.isOpen());
         data.put(FIELD_FILES, this.getFiles());
         return super.serialize(data);
     }
@@ -145,9 +145,9 @@ public class Program extends Model implements Comparable<Program> {
         program.setSubtitle(data.getString(FIELD_SUBTITLE));
         program.setPath(data.getString(FIELD_PATH));
         program.setIcon(data.getString(FIELD_ICON));
-        program.setDescription(data.getString(FIELD_DESCRIPTION));
         program.setPriority(data.getInteger(FIELD_PRIORITY));
         program.setMarketing(data.getString(FIELD_MARKETING));
+        program.setRecommended(data.getBoolean(FIELD_RECOMMENDED));
         program.setOpen(data.getBoolean(FIELD_OPEN));
         program.setFiles((List<ProgramFile>) data
                 .get(FIELD_FILES, ArrayList.class).stream()

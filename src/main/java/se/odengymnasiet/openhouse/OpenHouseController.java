@@ -1,0 +1,108 @@
+package se.odengymnasiet.openhouse;
+
+import org.bson.types.ObjectId;
+import se.odengymnasiet.Application;
+import se.odengymnasiet.Attributes;
+import se.odengymnasiet.Controller;
+import se.odengymnasiet.index.Article;
+import se.odengymnasiet.index.ArticlePaths;
+import se.odengymnasiet.index.ArticleRepository;
+import se.odengymnasiet.program.Program;
+import se.odengymnasiet.program.ProgramRepository;
+import se.odengymnasiet.route.HttpRoute;
+import spark.Redirect;
+import spark.Request;
+import spark.Response;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+public class OpenHouseController extends Controller<OpenHouseManifest> {
+
+    private final ArticleRepository articleRepository;
+    private final OpenHouseRepository openHouseRepository;
+    private final ProgramRepository programRepository;
+
+    public OpenHouseController(Application app,
+                               OpenHouseManifest manifest,
+                               Request request,
+                               Response response) {
+        super(app, manifest, request, response);
+
+        this.articleRepository = manifest.getArticleRepository();
+        this.openHouseRepository = manifest.getOpenHouseRepository();
+        this.programRepository = manifest.getProgramRepository();
+    }
+
+    @HttpRoute("/")
+    public Object index() {
+        int temporaryRedirect = Redirect.Status.TEMPORARY_REDIRECT.intValue();
+
+        List<OpenHouse> openHouses = new ArrayList<>(
+                this.openHouseRepository.findAllDeployedComing());
+        if (openHouses.isEmpty()) {
+            // no open houses found, redirect to index
+            this.getResponse().redirect("/", temporaryRedirect);
+            return this.getResponse().body();
+        } else if (openHouses.size() == 1) {
+            // one open house found - redirect to it
+            OpenHouse openHouse = openHouses.get(0);
+            this.getResponse().redirect("/open-house/" +
+                    openHouse.getId().toHexString(), temporaryRedirect);
+            return this.getResponse().body();
+        } else {
+            // more than one open houses found, display them
+            Attributes attributes = Attributes.create()
+                    .add("openHouses", openHouses);
+            return this.ok("open-houses/index", attributes, "Öppet hus");
+        }
+    }
+
+    @HttpRoute("/:open-house")
+    public Object openHouse() {
+        String path = this.getRequest().params(":open-house");
+        ObjectId objectId;
+        try {
+            objectId = new ObjectId(path);
+        } catch (IllegalArgumentException e) {
+            this.getResponse().status(404);
+            return this.getResponse().body();
+        }
+
+        // open house
+        OpenHouse openHouse = this.openHouseRepository.find(objectId);
+        if (openHouse == null || !openHouse.isDeployed() ||
+                openHouse.getPrograms().isEmpty()) {
+            this.getResponse().status(404);
+            return this.getResponse().body();
+        }
+
+        // programs
+        List<Program> programs = new ArrayList<>();
+        openHouse.getPrograms().forEach(programId -> {
+            Program program = this.programRepository.find(programId);
+            if (program != null) {
+                programs.add(program);
+            }
+        });
+        Collections.sort(programs);
+
+        // contact
+        Article contact = this.articleRepository
+                .findByPath(ArticlePaths.CONTACT);
+
+        Attributes attributes = Attributes.create()
+                .add("openHouse", openHouse)
+                .add("programs", programs)
+                .add("contact", contact);
+        return this.ok("open-houses/open_house", attributes,
+                this.openHousePageTitle(openHouse.getStartTime()));
+    }
+
+    private String openHousePageTitle(LocalDateTime start) {
+        return "Öppet hus den " + start.getDayOfMonth() + "/" +
+                start.getMonthValue() + " " + start.getYear();
+    }
+}
