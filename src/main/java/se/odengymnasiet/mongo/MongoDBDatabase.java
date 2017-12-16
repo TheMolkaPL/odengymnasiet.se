@@ -7,13 +7,13 @@ import org.slf4j.Logger;
 import se.odengymnasiet.Application;
 import se.odengymnasiet.Database;
 import se.odengymnasiet.Repository;
+import se.odengymnasiet.article.MongoArticleRepository;
 import se.odengymnasiet.contact.MongoGroupRepository;
 import se.odengymnasiet.contact.MongoPersonRepository;
-import se.odengymnasiet.index.MongoArticleRepository;
+import se.odengymnasiet.falafel.MongoFalafelRepository;
 import se.odengymnasiet.index.MongoMarketingRepository;
 import se.odengymnasiet.openhouse.MongoOpenHouseRepository;
 import se.odengymnasiet.program.MongoProgramRepository;
-import se.odengymnasiet.student.MongoFalafelRepository;
 import se.odengymnasiet.student.MongoStudentServiceRepository;
 import se.odengymnasiet.user.MongoUserRepository;
 

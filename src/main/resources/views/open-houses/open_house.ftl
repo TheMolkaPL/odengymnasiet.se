@@ -1,3 +1,5 @@
+<#assign toTime = DateTimeUtils.numberToTime>
+
 <#assign archived = openHouse.archived>
 <div class="text-center">
     <header class="jumbotron jumbotron-fluid">
@@ -28,10 +30,10 @@
                         <h4>${startTime.dayOfMonth}/${startTime.monthValue} ${startTime.year?c}</h4>
 
                         <#if openHouse.notEnding>
-                            <h5>börjar <time>${startTime.hour}:${startTime.minute}</time></h5>
+                            <h5>börjar <time>${toTime(startTime.hour)}:${toTime(startTime.minute)}</time></h5>
                         <#else>
                             <#assign endTime = openHouse.endTime>
-                            <h5><time>${startTime.hour}:${startTime.minute}</time> - ${endTime.hour}:${endTime.minute}</h5>
+                            <h5><time>${toTime(startTime.hour)}:${toTime(startTime.minute)}</time> - ${toTime(endTime.hour)}:${toTime(endTime.minute)}</h5>
                         </#if>
                     </div>
                 </div>

@@ -1,3 +1,5 @@
+<#assign toTime = DateTimeUtils.numberToTime>
+
 <div id="fb-root"></div>
 <script>(function(d, s, id) {
   var js, fjs = d.getElementsByTagName(s)[0];
@@ -93,10 +95,10 @@
                                 <#list openHouses as openHouse>
                                     <#assign startTime = openHouse.startTime>
                                     <#if openHouse.notEnding>
-                                        <#assign time = "börjar " + startTime.hour + ":" + startTime.minute>
+                                        <#assign time = "börjar " + toTime(startTime.hour) + ":" + toTime(startTime.minute)>
                                     <#else>
                                         <#assign endTime = openHouse.endTime>
-                                        <#assign time = startTime.hour + ":" + startTime.minute + " - " + endTime.hour + ":" + endTime.minute>
+                                        <#assign time = toTime(startTime.hour) + ":" + toTime(startTime.minute) + " - " + toTime(endTime.hour) + ":" + toTime(endTime.minute)>
                                     </#if>
 
                                     <a class="list-group-item list-group-item-action" href="/open-house/${openHouse.id}">

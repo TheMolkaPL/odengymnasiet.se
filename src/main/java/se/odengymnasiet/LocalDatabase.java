@@ -1,13 +1,13 @@
 package se.odengymnasiet;
 
 import org.slf4j.Logger;
+import se.odengymnasiet.article.ArticleRepository;
 import se.odengymnasiet.contact.GroupRepository;
 import se.odengymnasiet.contact.PersonRepository;
-import se.odengymnasiet.index.ArticleRepository;
+import se.odengymnasiet.falafel.FalafelRepository;
 import se.odengymnasiet.index.MarketingRepository;
 import se.odengymnasiet.openhouse.OpenHouseRepository;
 import se.odengymnasiet.program.ProgramRepository;
-import se.odengymnasiet.student.FalafelRepository;
 import se.odengymnasiet.student.StudentServiceRepository;
 import se.odengymnasiet.user.UserRepository;
 

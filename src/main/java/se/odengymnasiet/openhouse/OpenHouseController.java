@@ -4,9 +4,9 @@ import org.bson.types.ObjectId;
 import se.odengymnasiet.Application;
 import se.odengymnasiet.Attributes;
 import se.odengymnasiet.Controller;
-import se.odengymnasiet.index.Article;
-import se.odengymnasiet.index.ArticlePaths;
-import se.odengymnasiet.index.ArticleRepository;
+import se.odengymnasiet.article.Article;
+import se.odengymnasiet.article.ArticlePaths;
+import se.odengymnasiet.article.ArticleRepository;
 import se.odengymnasiet.program.Program;
 import se.odengymnasiet.program.ProgramRepository;
 import se.odengymnasiet.route.HttpRoute;
@@ -91,7 +91,7 @@ public class OpenHouseController extends Controller<OpenHouseManifest> {
 
         // contact
         Article contact = this.articleRepository
-                .findByPath(ArticlePaths.CONTACT);
+                .findByPath(ArticlePaths.contact());
 
         Attributes attributes = Attributes.create()
                 .add("openHouse", openHouse)

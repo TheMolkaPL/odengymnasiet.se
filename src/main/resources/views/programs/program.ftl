@@ -1,3 +1,5 @@
+<#assign toTime = DateTimeUtils.numberToTime>
+
 <div class="jumbotron jumbotron-fluid">
     <div class="container">
         <header>
@@ -19,12 +21,13 @@
 
         <div class="row">
             <div class="col-lg-8">
-                <nav class="nav nav-tabs nav-justified" style="margin-bottom: 24px;">
-                    <a class="nav-item nav-link<#if cur_page == "index"> active</#if>" href="/programs/${program.path}">Om utbildningen</a>
-                    <a class="nav-item nav-link<#if cur_page == "elever-berattar"> active</#if>" href="/programs/${program.path}/elever-berattar">Elever berättar</a>
-                    <a class="nav-item nav-link<#if cur_page == "traffa-lararna"> active</#if>" href="/programs/${program.path}/traffa-lararna">Träffa lärarna</a>
-                    <a class="nav-item nav-link<#if cur_page == "efter-gymnasiet"> active</#if>" href="/programs/${program.path}/efter-gymnasiet">Efter gymnasiet</a>
-                </nav>
+                <#if pages?size gt 1>
+                    <nav class="nav nav-tabs nav-justified" style="margin-bottom: 24px;">
+                        <#list pages as page>
+                            <a class="nav-item nav-link<#if page.active> active</#if>" href="/${page.target}">${page.article.title}</a>
+                        </#list>
+                    </nav>
+                </#if>
 
                 <article class="text-justify" id="article-content">
                     ${article.text}
@@ -63,10 +66,10 @@
                                 <#list openHouses as openHouse>
                                     <#assign startTime = openHouse.startTime>
                                     <#if openHouse.notEnding>
-                                        <#assign time = "börjar " + startTime.hour + ":" + startTime.minute>
+                                        <#assign time = "börjar " + toTime(startTime.hour) + ":" + toTime(startTime.minute)>
                                     <#else>
                                         <#assign endTime = openHouse.endTime>
-                                        <#assign time = startTime.hour + ":" + startTime.minute + " - " + endTime.hour + ":" + endTime.minute>
+                                        <#assign time = toTime(startTime.hour) + ":" + toTime(startTime.minute) + " - " + toTime(endTime.hour) + ":" + toTime(endTime.minute)>
                                     </#if>
 
                                     <a class="list-group-item list-group-item-action" href="/open-house/${openHouse.id}">

@@ -4,8 +4,9 @@ import org.bson.types.ObjectId;
 import se.odengymnasiet.Application;
 import se.odengymnasiet.Attributes;
 import se.odengymnasiet.Controller;
-import se.odengymnasiet.index.Article;
-import se.odengymnasiet.index.ArticleRepository;
+import se.odengymnasiet.article.Article;
+import se.odengymnasiet.article.ArticlePaths;
+import se.odengymnasiet.article.ArticleRepository;
 import se.odengymnasiet.route.HttpRoute;
 import spark.Request;
 import spark.Response;
@@ -35,7 +36,8 @@ public class ContactController extends Controller<ContactManifest> {
 
     @HttpRoute("/")
     public Object index() {
-        Article article = this.articleRepository.findByPath("contact");
+        Article article = this.articleRepository
+                .findByPath(ArticlePaths.contact());
         if (article == null) {
             article = Article.NULL;
         }

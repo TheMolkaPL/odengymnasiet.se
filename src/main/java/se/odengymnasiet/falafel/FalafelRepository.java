@@ -1,4 +1,4 @@
-package se.odengymnasiet.student;
+package se.odengymnasiet.falafel;
 
 import se.odengymnasiet.LocalRepository;
 import se.odengymnasiet.Repository;

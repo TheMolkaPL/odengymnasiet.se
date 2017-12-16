@@ -4,13 +4,16 @@ import org.bson.types.ObjectId;
 import se.odengymnasiet.Application;
 import se.odengymnasiet.Attributes;
 import se.odengymnasiet.Controller;
+import se.odengymnasiet.article.Article;
+import se.odengymnasiet.article.ArticlePaths;
+import se.odengymnasiet.article.ArticleRepository;
+import se.odengymnasiet.falafel.Falafel;
+import se.odengymnasiet.falafel.FalafelRepository;
 import se.odengymnasiet.openhouse.OpenHouse;
 import se.odengymnasiet.openhouse.OpenHouseRepository;
 import se.odengymnasiet.program.Program;
 import se.odengymnasiet.program.ProgramRepository;
 import se.odengymnasiet.route.HttpRoute;
-import se.odengymnasiet.student.Falafel;
-import se.odengymnasiet.student.FalafelRepository;
 import spark.Request;
 import spark.Response;
 
@@ -103,7 +106,8 @@ public class IndexController extends Controller<IndexManifest> {
 
     @HttpRoute("/about")
     public Object about() {
-        Article article = this.articleRepository.findByPath(ArticlePaths.ABOUT);
+        Article article = this.articleRepository
+                .findByPath(ArticlePaths.about());
         if (article == null) {
             article = Article.NULL;
         }

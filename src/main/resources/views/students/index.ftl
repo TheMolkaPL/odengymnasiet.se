@@ -10,9 +10,13 @@
     <article>
         <div class="row">
             <div class="col-md-9">
-                <section>
+                <article class="text-justify">
+                    <header style="margin-bottom: 16px;">
+                        <h3>${article.title}</h3>
+                    </header>
 
-                </section>
+                    ${article.text}
+                </article>
             </div>
 
             <div class="col-md-3">

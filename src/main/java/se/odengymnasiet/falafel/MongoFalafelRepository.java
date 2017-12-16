@@ -1,4 +1,4 @@
-package se.odengymnasiet.student;
+package se.odengymnasiet.falafel;
 
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;

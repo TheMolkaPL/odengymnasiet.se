@@ -1,5 +1,8 @@
 package se.odengymnasiet;
 
+import freemarker.ext.beans.BeansWrapper;
+import freemarker.template.TemplateHashModel;
+import freemarker.template.TemplateModelException;
 import freemarker.template.Version;
 import org.jdom2.Element;
 import org.slf4j.Logger;
@@ -12,6 +15,7 @@ import se.odengymnasiet.program.ProgramsManifest;
 import se.odengymnasiet.route.RequestMethod;
 import se.odengymnasiet.route.RouteExecutorContainer;
 import se.odengymnasiet.student.StudentsManifest;
+import se.odengymnasiet.util.DateTimeUtils;
 import spark.ModelAndView;
 import spark.Service;
 import spark.TemplateEngine;
@@ -326,6 +330,15 @@ public final class Application implements SparkApplication {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
+
+        try {
+            BeansWrapper wrapper = BeansWrapper.getDefaultInstance();
+            TemplateHashModel staticModels = wrapper.getStaticModels();
+            config.setSharedVariable("DateTimeUtils", staticModels
+                    .get(DateTimeUtils.class.getName()));
+        } catch (TemplateModelException e) {
+            e.printStackTrace();
         }
 
         return new FreeMarkerEngine(config);

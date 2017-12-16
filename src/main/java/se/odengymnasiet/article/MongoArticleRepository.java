@@ -1,4 +1,4 @@
-package se.odengymnasiet.index;
+package se.odengymnasiet.article;
 
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
@@ -6,6 +6,10 @@ import org.bson.Document;
 import se.odengymnasiet.RepositoryHandler;
 import se.odengymnasiet.mongo.MongoCollectionName;
 import se.odengymnasiet.mongo.MongoRepository;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.regex.Pattern;
 
 import static com.mongodb.client.model.Filters.*;
 
@@ -22,6 +26,15 @@ public class MongoArticleRepository extends MongoRepository<Article>
     @Override
     public Article deserialize(Document data) {
         return Article.deserialize(data);
+    }
+
+    @Override
+    public Collection<Article> findAllByStartingPath(String startingPath) {
+        Pattern pattern = Pattern.compile("^" + startingPath);
+
+        return this.getCollection().find(regex(Article.FIELD_PATH, pattern))
+                .map(this::deserialize)
+                .into(new ArrayList<>());
     }
 
     @Override

@@ -31,7 +31,7 @@
     <div class="row">
         <div class="col-lg-9">
             <article class="text-justify">
-                <header>
+                <header style="margin-bottom: 16px;">
                     <h3>Expedition</h3>
                 </header>
 

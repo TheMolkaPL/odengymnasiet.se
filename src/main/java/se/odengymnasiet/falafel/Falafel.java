@@ -1,4 +1,4 @@
-package se.odengymnasiet.student;
+package se.odengymnasiet.falafel;
 
 import org.bson.Document;
 import org.bson.types.ObjectId;

@@ -3,9 +3,10 @@ package se.odengymnasiet.index;
 import se.odengymnasiet.Manifest;
 import se.odengymnasiet.ManifestInfo;
 import se.odengymnasiet.RepositoryContainer;
+import se.odengymnasiet.article.ArticleRepository;
+import se.odengymnasiet.falafel.FalafelRepository;
 import se.odengymnasiet.openhouse.OpenHouseRepository;
 import se.odengymnasiet.program.ProgramRepository;
-import se.odengymnasiet.student.FalafelRepository;
 
 @Index
 @ManifestInfo(name = "Index",

@@ -3,7 +3,7 @@ package se.odengymnasiet.contact;
 import se.odengymnasiet.Manifest;
 import se.odengymnasiet.ManifestInfo;
 import se.odengymnasiet.RepositoryContainer;
-import se.odengymnasiet.index.ArticleRepository;
+import se.odengymnasiet.article.ArticleRepository;
 import se.odengymnasiet.index.IndexManifest;
 
 @ManifestInfo(name = "Contact",

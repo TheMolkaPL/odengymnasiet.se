@@ -1,3 +1,5 @@
+<#assign toTime = DateTimeUtils.numberToTime>
+
 <#assign startTime = openHouse.startTime>
 <#if !openHouse.notEnding>
     <#assign endTime = openHouse.endTime>
@@ -15,9 +17,9 @@
     </a>
     <div class="card-body">
         <#if openHouse.notEnding>
-            <h5>börjar <time>${startTime.hour}:${startTime.minute}</time></h5>
+            <h5>börjar <time>${toTime(startTime.hour)}:${toTime(startTime.minute)}</time></h5>
         <#else>
-            <h5><time>${startTime.hour}:${startTime.minute}</time> - ${endTime.hour}:${endTime.minute}</h5>
+            <h5><time>${toTime(startTime.hour)}:${toTime(startTime.minute)}</time> - ${toTime(endTime.hour)}:${toTime(endTime.minute)}</h5>
         </#if>
     </div>
 </article>
