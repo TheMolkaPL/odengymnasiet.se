@@ -1,3 +1,9 @@
+<style>
+.jumbotron header a:hover {
+    text-decoration: none;
+}
+</style>
+
 <div class="jumbotron jumbotron-fluid">
     <div class="container">
         <header>

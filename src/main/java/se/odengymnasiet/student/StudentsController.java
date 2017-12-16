@@ -6,13 +6,13 @@ import se.odengymnasiet.Controller;
 import se.odengymnasiet.article.Article;
 import se.odengymnasiet.article.ArticlePaths;
 import se.odengymnasiet.article.ArticleRepository;
+import se.odengymnasiet.article.NavigationItem;
 import se.odengymnasiet.route.HttpRoute;
 import spark.Request;
 import spark.Response;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class StudentsController extends Controller<StudentsManifest> {
 
@@ -31,19 +31,58 @@ public class StudentsController extends Controller<StudentsManifest> {
 
     @HttpRoute("/")
     public Object index() {
-        Article article = this.articleRepository
-                .findByPath(ArticlePaths.students() + "/");
+        // article
+        String articlePath = ArticlePaths.students() + "/";
+        Article article = this.articleRepository.findByPath(articlePath);
         if (article == null) {
             article = Article.NULL;
         }
 
-        List<StudentService> studentServices = this.studentServiceRepository
-                .findAll().stream().collect(Collectors.toList());
-        Collections.sort(studentServices);
+        // pages
+        List<NavigationItem> pages = NavigationItem.list(
+                this.articleRepository,
+                articlePath,
+                articlePath,
+                "För elever");
+
+        // student services
+        List<StudentService> studentServices = new ArrayList<>(
+                this.studentServiceRepository.findAll());
 
         Attributes attributes = Attributes.create()
                 .add("article", article)
-                .add("student_services", studentServices);
-        return this.ok("students/index", attributes, "För elever");
+                .add("pages", pages)
+                .add("studentServices", studentServices);
+        return this.ok("students/index", attributes, article.getTitle());
+    }
+
+    @HttpRoute("/:page")
+    public Object page() {
+        String path = this.getRequest().params(":page");
+
+        // article
+        String articlePath = ArticlePaths.students(path.toLowerCase());
+        Article article = this.articleRepository.findByPath(articlePath);
+        if (article == null) {
+            this.getResponse().status(404);
+            return this.getResponse().body();
+        }
+
+        // pages
+        List<NavigationItem> pages = NavigationItem.list(
+                this.articleRepository,
+                ArticlePaths.students() + "/",
+                articlePath,
+                "För elever");
+
+        // student services
+        List<StudentService> studentServices = new ArrayList<>(
+                this.studentServiceRepository.findAll());
+
+        Attributes attributes = Attributes.create()
+                .add("article", article)
+                .add("pages", pages)
+                .add("studentServices", studentServices);
+        return this.ok("students/index", attributes, article.getTitle());
     }
 }

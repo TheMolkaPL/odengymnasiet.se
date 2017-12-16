@@ -16,9 +16,9 @@
 
         <title>
             <#if title??>
-                ${title} - Odengymnasiet
+                ${title} - Odengymnasiet Admin
             <#else>
-                Odengymnasiet
+                Odengymnasiet Admin
             </#if>
         </title>
     </head>
@@ -27,9 +27,10 @@
         <header>
             <nav class="navbar navbar-expand-lg navbar-light bg-ligt">
                 <div class="container">
-                    <a class="navbar-brand" href="/">
+                    <a class="navbar-brand" href="/admin/dashboard">
                         <object type="image/svg+xml" data="/logos/svg/color/odengymnasiet-icon-color.svg" width="30" height="30" class="d-inline-block align-top"></object>
                         <span style="color: #254A9F;">Odengymnasiet</span>
+                        <span class="text-danger">administration</span>
                     </a>
 
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -39,41 +40,13 @@
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav mr-auto">
                             <li class="nav-item">
-                                <a class="nav-link <#if app_nav == "about">active</#if>" href="/about">Om skolan</a>
-                            </li>
-
-                            <li class="nav-item">
-                                <a class="nav-link <#if app_nav == "programs">active</#if>" href="/programs">Våra utbildningar</a>
-                            </li>
-
-                            <#if studentServices?size gt 0>
-                                <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle <#if app_nav == "students">active</#if>" href="/students" id="navbarStudentsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">För elever</a>
-                                    <div class="dropdown-menu" aria-labelledby="navbarStudentsDropdown">
-                                        <#list studentServices as service>
-                                            <a class="dropdown-item" href="${service.url}" target="_blank" rel="noopener">${service.name}</a>
-                                        </#list>
-
-                                        <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item" href="/students">Mer...</a>
-                                    </div>
-                                </li>
-                            <#else>
-                                <li class="nav-item">
-                                    <a class="nav-link <#if app_nav == "students">active</#if>" href="/students">För elever</a>
-                                </li>
-                            </#if>
-
-                            <li class="nav-item">
-                                <a class="nav-link <#if app_nav == "contact">active</#if>" href="/contact">Kontakt</a>
+                                <a class="nav-link" href="/logout">Logga ut</a>
                             </li>
                         </ul>
 
-                        <#if admin>
-                            <div class="pull-right">
-                                <a class="btn btn-outline-danger" href="/admin/dashboard" target="_blank" rel="noopener">Hantera webbsidan</a>
-                            </div>
-                        </#if>
+                        <div class="pull-right">
+                            <a class="btn btn-outline-success" href="/" target="_blank" rel="noopener">Visa webbsidan</a>
+                        </div>
                     </div>
                 </div>
             </nav>

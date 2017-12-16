@@ -7,6 +7,7 @@ import se.odengymnasiet.Controller;
 import se.odengymnasiet.article.Article;
 import se.odengymnasiet.article.ArticlePaths;
 import se.odengymnasiet.article.ArticleRepository;
+import se.odengymnasiet.article.NavigationItem;
 import se.odengymnasiet.openhouse.OpenHouse;
 import se.odengymnasiet.openhouse.OpenHouseRepository;
 import se.odengymnasiet.route.HttpRoute;
@@ -21,6 +22,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class ProgramsController extends Controller<ProgramsManifest> {
+
+    public static final String PROGRAM_INDEX_TITLE = "Om utbildningen";
 
     private final ArticleRepository articleRepository;
     private final OpenHouseRepository openHouseRepository;
@@ -65,6 +68,13 @@ public class ProgramsController extends Controller<ProgramsManifest> {
             article = Article.NULL;
         }
 
+        // pages
+        List<NavigationItem> pages = NavigationItem.list(
+                this.articleRepository,
+                ArticlePaths.programs(program.getPath()) + "/",
+                articlePath,
+                PROGRAM_INDEX_TITLE);
+
         // open houses
         List<OpenHouse> openHouses = new ArrayList<>(
                 this.openHouseRepository.findAllDeployedComing());
@@ -78,9 +88,8 @@ public class ProgramsController extends Controller<ProgramsManifest> {
 
         Attributes attributes = Attributes.create()
                 .add("program", program)
-                .add("pages", this.navigationItems(
-                        program, articlePath, articlePath))
                 .add("article", article)
+                .add("pages", pages)
                 .add("openHouses", openHouses);
         return this.ok("programs/program", attributes, program.getTitle());
     }
@@ -116,6 +125,13 @@ public class ProgramsController extends Controller<ProgramsManifest> {
             return this.getResponse().body();
         }
 
+        // pages
+        List<NavigationItem> pages = NavigationItem.list(
+                this.articleRepository,
+                ArticlePaths.programs(program.getPath()) + "/",
+                articlePath,
+                PROGRAM_INDEX_TITLE);
+
         // open houses
         List<OpenHouse> openHouses = new ArrayList<>(
                 this.openHouseRepository.findAllDeployedComing());
@@ -127,16 +143,14 @@ public class ProgramsController extends Controller<ProgramsManifest> {
                 .collect(Collectors.toList());
         Collections.sort(openHouses);
 
-        String indexPath = ArticlePaths.programs(program.getPath()) + "/";
-        attributes.add("pages", this.navigationItems(
-                          program, articlePath, indexPath))
-                  .add("article", article)
+        attributes.add("article", article)
+                  .add("pages", pages)
                   .add("openHouses", openHouses);
         return this.ok("programs/program", attributes, program.getTitle());
     }
 
     private List<NavigationItem> navigationItems(
-            Program program, String now, String indexPath) {
+            Program program, String now) {
         String path = ArticlePaths.programs(program.getPath()) + "/";
         List<Article> articles = new ArrayList<>(this.articleRepository
                 .findAllByStartingPath(path));
@@ -161,7 +175,7 @@ public class ProgramsController extends Controller<ProgramsManifest> {
             String target = article.getPath();
             boolean active = article.getPath().equals(now);
 
-            if (indexPath != null && article.getPath().equals(indexPath)) {
+            if (article.getPath().equals(path)) {
                 target = target.substring(0, target.length() - 1);
             }
 
@@ -170,40 +184,6 @@ public class ProgramsController extends Controller<ProgramsManifest> {
 
         Collections.sort(items);
         return items;
-    }
-
-    public class NavigationItem implements Comparable<NavigationItem> {
-
-        private final Article article;
-        private final String target;
-        private final boolean active;
-
-        public NavigationItem(Article article, String target) {
-            this(article, target, false);
-        }
-
-        public NavigationItem(Article article, String target, boolean active) {
-            this.article = article;
-            this.target = target;
-            this.active = active;
-        }
-
-        @Override
-        public int compareTo(NavigationItem o) {
-            return this.getArticle().compareTo(o.getArticle());
-        }
-
-        public Article getArticle() {
-            return this.article;
-        }
-
-        public String getTarget() {
-            return this.target;
-        }
-
-        public boolean isActive() {
-            return this.active;
-        }
     }
 
     @HttpRoute(value = "/:program/application", methods = RequestMethod.POST)

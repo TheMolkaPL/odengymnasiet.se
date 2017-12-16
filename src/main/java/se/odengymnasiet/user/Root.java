@@ -7,6 +7,9 @@ import se.odengymnasiet.contact.Person;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * @deprecated Not used anymore. See {@link se.odengymnasiet.user.User#root}
+ */
 @Deprecated
 public class Root extends User {
 

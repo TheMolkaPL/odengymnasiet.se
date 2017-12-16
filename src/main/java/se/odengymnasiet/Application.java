@@ -7,7 +7,8 @@ import freemarker.template.Version;
 import org.jdom2.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import se.odengymnasiet.admin.AdminManifest;
+import se.odengymnasiet.admin.DefaultAdminManifest;
+import se.odengymnasiet.admin.TopicsManifest;
 import se.odengymnasiet.contact.ContactManifest;
 import se.odengymnasiet.index.IndexManifest;
 import se.odengymnasiet.openhouse.OpenHouseManifest;
@@ -346,12 +347,13 @@ public final class Application implements SparkApplication {
 
     private void registerDefaultManifests() {
         Arrays.asList(
-                AdminManifest.class,
                 ContactManifest.class,
+                DefaultAdminManifest.class,
                 IndexManifest.class,
                 OpenHouseManifest.class,
                 ProgramsManifest.class,
-                StudentsManifest.class
+                StudentsManifest.class,
+                TopicsManifest.class
         ).forEach(manifest -> this.getManifests().registerManifest(manifest));
     }
 }

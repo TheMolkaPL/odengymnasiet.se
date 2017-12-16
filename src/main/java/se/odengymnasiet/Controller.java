@@ -58,6 +58,7 @@ public abstract class Controller<E extends Manifest> {
 
     public static final String VIEWS_DIRECTORY = "/views";
     public static final String LAYOUTS_DIRECTORY = "/layouts";
+    public static final String DEFAULT_LAYOUT_NAME = "application";
 
     public String ok(String view) {
         return this.ok(view, null);
@@ -82,7 +83,7 @@ public abstract class Controller<E extends Manifest> {
         }
 
         if (layout == null) {
-            layout = "application";
+            layout = this.getDefaultLayout();
         }
 
         String appNav = this.getRequest().pathInfo().split("/", 3)[1];
@@ -110,10 +111,14 @@ public abstract class Controller<E extends Manifest> {
                 .add("title", title)
                 .add("body", this.render(view, attributes).trim())
                 .add("app_nav", appNav.toLowerCase())
-                .add("student_services", studentServices)
+                .add("studentServices", studentServices)
                 .add("admin", admin);
 
         return this.render(LAYOUTS_DIRECTORY + "/" + layout, layoutAttributes);
+    }
+
+    public String getDefaultLayout() {
+        return DEFAULT_LAYOUT_NAME;
     }
 
     public String render(String view) {

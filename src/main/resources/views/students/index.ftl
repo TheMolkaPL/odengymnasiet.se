@@ -21,7 +21,6 @@
 
             <div class="col-md-3">
                 <aside>
-                    <#assign navigation_now = "index">
                     <#include "navigation.ftl">
                 </aside>
             </div>
