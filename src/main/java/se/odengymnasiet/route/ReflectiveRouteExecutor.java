@@ -8,6 +8,11 @@ import spark.Response;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+/**
+ * A {@link RouteExecutor} which executes requests by invoked by the given
+ * {@link Method} in the constructor.
+ * @param <E> The {@link Controller} which this method is in.
+ */
 public class ReflectiveRouteExecutor<E extends Controller>
         implements RouteExecutor {
 

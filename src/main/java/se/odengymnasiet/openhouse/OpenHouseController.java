@@ -6,9 +6,7 @@ import se.odengymnasiet.Attributes;
 import se.odengymnasiet.Controller;
 import se.odengymnasiet.article.Article;
 import se.odengymnasiet.article.ArticlePaths;
-import se.odengymnasiet.article.ArticleRepository;
 import se.odengymnasiet.program.Program;
-import se.odengymnasiet.program.ProgramRepository;
 import se.odengymnasiet.route.HttpRoute;
 import spark.Redirect;
 import spark.Request;
@@ -21,27 +19,19 @@ import java.util.List;
 
 public class OpenHouseController extends Controller<OpenHouseManifest> {
 
-    private final ArticleRepository articleRepository;
-    private final OpenHouseRepository openHouseRepository;
-    private final ProgramRepository programRepository;
-
     public OpenHouseController(Application app,
                                OpenHouseManifest manifest,
                                Request request,
                                Response response) {
         super(app, manifest, request, response);
-
-        this.articleRepository = manifest.getArticleRepository();
-        this.openHouseRepository = manifest.getOpenHouseRepository();
-        this.programRepository = manifest.getProgramRepository();
     }
 
     @HttpRoute("/")
     public Object index() {
         int temporaryRedirect = Redirect.Status.TEMPORARY_REDIRECT.intValue();
 
-        List<OpenHouse> openHouses = new ArrayList<>(
-                this.openHouseRepository.findAllDeployedComing());
+        List<OpenHouse> openHouses = new ArrayList<>(this.getManifest()
+                .getOpenHouseRepository().findAllDeployedComing());
         if (openHouses.isEmpty()) {
             // no open houses found, redirect to index
             this.getResponse().redirect("/", temporaryRedirect);
@@ -62,6 +52,8 @@ public class OpenHouseController extends Controller<OpenHouseManifest> {
 
     @HttpRoute("/:open-house")
     public Object openHouse() {
+        OpenHouseManifest manifest = this.getManifest();
+
         String path = this.getRequest().params(":open-house");
         ObjectId objectId;
         try {
@@ -72,7 +64,7 @@ public class OpenHouseController extends Controller<OpenHouseManifest> {
         }
 
         // open house
-        OpenHouse openHouse = this.openHouseRepository.find(objectId);
+        OpenHouse openHouse = manifest.getOpenHouseRepository().find(objectId);
         if (openHouse == null || !openHouse.isDeployed() ||
                 openHouse.getPrograms().isEmpty()) {
             this.getResponse().status(404);
@@ -82,7 +74,7 @@ public class OpenHouseController extends Controller<OpenHouseManifest> {
         // programs
         List<Program> programs = new ArrayList<>();
         openHouse.getPrograms().forEach(programId -> {
-            Program program = this.programRepository.find(programId);
+            Program program = manifest.getProgramRepository().find(programId);
             if (program != null) {
                 programs.add(program);
             }
@@ -90,7 +82,7 @@ public class OpenHouseController extends Controller<OpenHouseManifest> {
         Collections.sort(programs);
 
         // contact
-        Article contact = this.articleRepository
+        Article contact = manifest.getArticleRepository()
                 .findByPath(ArticlePaths.contact());
 
         Attributes attributes = Attributes.create()

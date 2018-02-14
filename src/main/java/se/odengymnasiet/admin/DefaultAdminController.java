@@ -5,7 +5,6 @@ import se.odengymnasiet.Attributes;
 import se.odengymnasiet.Controller;
 import se.odengymnasiet.route.HttpRoute;
 import se.odengymnasiet.route.RequestMethod;
-import se.odengymnasiet.user.UserRepository;
 import spark.Redirect;
 import spark.Request;
 import spark.Response;
@@ -14,15 +13,11 @@ import spark.Session;
 public class DefaultAdminController
         extends AdminController<DefaultAdminManifest> {
 
-    private final UserRepository userRepository;
-
     public DefaultAdminController(Application app,
                                   DefaultAdminManifest manifest,
                                   Request request,
                                   Response response) {
         super(app, manifest, request, response);
-
-        this.userRepository = manifest.getUserRepository();
     }
 
     @HttpRoute("/")

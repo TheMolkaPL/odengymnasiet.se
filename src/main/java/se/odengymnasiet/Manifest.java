@@ -17,6 +17,12 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Manifests represents a module, or a separate piece of the website. Manifests
+ * are loaded and enabled on the application startup, and disabled on its
+ * shutdown. Manifests are representing a single piece of the URL route.
+ * @param <E> The {@link Controller} of this manifest.
+ */
 public class Manifest<E extends Controller> {
 
     private Application application;

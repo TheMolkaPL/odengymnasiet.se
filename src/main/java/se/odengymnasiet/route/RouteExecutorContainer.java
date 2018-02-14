@@ -7,6 +7,10 @@ import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
+/**
+ * Container which stores a map where the key is the route (as a
+ * {@link String}), and the value is its executor (as a {@link RouteExecutor}).
+ */
 public class RouteExecutorContainer {
 
     private final Application application;

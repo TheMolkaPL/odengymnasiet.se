@@ -6,16 +6,18 @@ import se.odengymnasiet.Attributes;
 import se.odengymnasiet.Controller;
 import se.odengymnasiet.article.Article;
 import se.odengymnasiet.article.ArticlePaths;
-import se.odengymnasiet.article.ArticleRepository;
 import se.odengymnasiet.article.NavigationItem;
+import se.odengymnasiet.form.Attribute;
+import se.odengymnasiet.form.Form;
+import se.odengymnasiet.form.Namespace;
 import se.odengymnasiet.openhouse.OpenHouse;
-import se.odengymnasiet.openhouse.OpenHouseRepository;
 import se.odengymnasiet.route.HttpRoute;
 import se.odengymnasiet.route.RequestMethod;
 import spark.Request;
 import spark.Response;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -25,25 +27,17 @@ public class ProgramsController extends Controller<ProgramsManifest> {
 
     public static final String PROGRAM_INDEX_TITLE = "Om utbildningen";
 
-    private final ArticleRepository articleRepository;
-    private final OpenHouseRepository openHouseRepository;
-    private final ProgramRepository programRepository;
-
     public ProgramsController(Application app,
                               ProgramsManifest manifest,
                               Request request,
                               Response response) {
         super(app, manifest, request, response);
-
-        this.articleRepository = manifest.getArticleRepository();
-        this.openHouseRepository = manifest.getOpenHouseRepository();
-        this.programRepository = manifest.getProgramRepository();
     }
 
     @HttpRoute("/")
     public Object index() {
-        List<Program> programs = new ArrayList<>(
-                this.programRepository.findAll());
+        List<Program> programs = new ArrayList<>(this.getManifest()
+                .getProgramRepository().findAll());
         Collections.sort(programs);
 
         Attributes attributes = Attributes.create()
@@ -53,8 +47,10 @@ public class ProgramsController extends Controller<ProgramsManifest> {
 
     @HttpRoute("/:program")
     public Object program() {
+        ProgramsManifest manifest = this.getManifest();
+
         String path = this.getRequest().params(":program");
-        Program program = this.programRepository.findByPath(path);
+        Program program = manifest.getProgramRepository().findByPath(path);
 
         if (program == null) {
             this.getResponse().status(404);
@@ -63,21 +59,22 @@ public class ProgramsController extends Controller<ProgramsManifest> {
 
         // article
         String articlePath = ArticlePaths.programs(program.getPath()) + "/";
-        Article article = this.articleRepository.findByPath(articlePath);
+        Article article = manifest.getArticleRepository()
+                .findByPath(articlePath);
         if (article == null) {
             article = Article.NULL;
         }
 
         // pages
         List<NavigationItem> pages = NavigationItem.list(
-                this.articleRepository,
+                manifest.getArticleRepository(),
                 ArticlePaths.programs(program.getPath()) + "/",
                 articlePath,
                 PROGRAM_INDEX_TITLE);
 
         // open houses
         List<OpenHouse> openHouses = new ArrayList<>(
-                this.openHouseRepository.findAllDeployedComing());
+                manifest.getOpenHouseRepository().findAllDeployedComing());
         openHouses = openHouses.stream()
                 .filter(openHouse -> {
                     ObjectId programId = program.getId();
@@ -96,9 +93,11 @@ public class ProgramsController extends Controller<ProgramsManifest> {
 
     @HttpRoute("/:program/:page")
     public Object programPage() {
+        ProgramsManifest manifest = this.getManifest();
+
         String path = this.getRequest().params(":program");
         String page = this.getRequest().params(":page");
-        Program program = this.programRepository.findByPath(path);
+        Program program = manifest.getProgramRepository().findByPath(path);
 
         Attributes attributes = Attributes.create()
                 .add("program", program);
@@ -119,7 +118,8 @@ public class ProgramsController extends Controller<ProgramsManifest> {
         // article
         String articlePath = ArticlePaths.programs(program.getPath(),
                                                    page.toLowerCase());
-        Article article = this.articleRepository.findByPath(articlePath);
+        Article article = manifest.getArticleRepository()
+                .findByPath(articlePath);
         if (article == null) {
             this.getResponse().status(404);
             return this.getResponse().body();
@@ -127,14 +127,14 @@ public class ProgramsController extends Controller<ProgramsManifest> {
 
         // pages
         List<NavigationItem> pages = NavigationItem.list(
-                this.articleRepository,
+                manifest.getArticleRepository(),
                 ArticlePaths.programs(program.getPath()) + "/",
                 articlePath,
                 PROGRAM_INDEX_TITLE);
 
         // open houses
         List<OpenHouse> openHouses = new ArrayList<>(
-                this.openHouseRepository.findAllDeployedComing());
+                manifest.getOpenHouseRepository().findAllDeployedComing());
         openHouses = openHouses.stream()
                 .filter(openHouse -> {
                     ObjectId programId = program.getId();
@@ -152,8 +152,8 @@ public class ProgramsController extends Controller<ProgramsManifest> {
     private List<NavigationItem> navigationItems(
             Program program, String now) {
         String path = ArticlePaths.programs(program.getPath()) + "/";
-        List<Article> articles = new ArrayList<>(this.articleRepository
-                .findAllByStartingPath(path));
+        List<Article> articles = new ArrayList<>(this.getManifest()
+                .getArticleRepository().findAllByStartingPath(path));
 
         Optional<Article> indexMaybe = articles.stream()
                 .filter(article -> article.getPath().equals(path))
@@ -189,7 +189,8 @@ public class ProgramsController extends Controller<ProgramsManifest> {
     @HttpRoute(value = "/:program/application", methods = RequestMethod.POST)
     public Object programApplicationPost() {
         String path = this.getRequest().params(":program");
-        Program program = this.programRepository.findByPath(path);
+        Program program = this.getManifest().getProgramRepository()
+                .findByPath(path);
 
         Attributes attributes = Attributes.create()
                 .add("program", program);
@@ -202,9 +203,41 @@ public class ProgramsController extends Controller<ProgramsManifest> {
                     "Anmälan till " + program.getTitle() + " är stängd");
         }
 
-        // TODO Validate the form
+        Form form = this.applicationForm();
+        form.validate();
 
         return this.ok("programs/program_application_ok", attributes,
                 "Tack för din anmälan till " + program.getTitle());
+    }
+
+    private Form applicationForm() {
+        Namespace studentNamespace = Namespace.getNamespace("student");
+        Namespace guardianNamespace = Namespace.getNamespace("guardian");
+        Namespace schoolNamespace = Namespace.getNamespace("school");
+        Namespace gradesNamespace = Namespace.getNamespace("grades");
+        Namespace personNamespace = Namespace.getNamespace("person");
+        Namespace feedbackNamespace = Namespace.getNamespace("feedback");
+
+        return Form.builder()
+                .request(this.getRequest()).response(this.getResponse())
+                .namespace(studentNamespace, Arrays.asList(
+                        Attribute.require("first_name"),
+                        Attribute.require("last_name")))
+                .namespace(guardianNamespace, Arrays.asList(
+                        Attribute.require("first_name"),
+                        Attribute.require("last_name")))
+                .namespace(schoolNamespace, Arrays.asList(
+                        Attribute.require(""),
+                        Attribute.require("")))
+                .namespace(gradesNamespace, Arrays.asList(
+                        Attribute.require(""),
+                        Attribute.require("")))
+                .namespace(personNamespace, Arrays.asList(
+                        Attribute.require(""),
+                        Attribute.require("")))
+                .namespace(feedbackNamespace, Arrays.asList(
+                        Attribute.require(""),
+                        Attribute.require("")))
+                .build();
     }
 }

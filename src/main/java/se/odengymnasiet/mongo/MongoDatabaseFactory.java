@@ -26,6 +26,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Producing a MongoDB database.
+ */
 public class MongoDatabaseFactory implements DatabaseFactory {
 
     public static final String DEFAULT_HOST;

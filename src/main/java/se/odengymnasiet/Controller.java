@@ -13,6 +13,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * One of the basic classes for the MVC (model/view/controller) design pattern.
+ * Controller is controlling the routes, fetching the data from {@link Model}s,
+ * handling requests and rendering the results by the view resources.
+ * @param <E> The {@link Manifest} which this class is stored under.
+ */
 public abstract class Controller<E extends Manifest> {
 
     public static final String SESSION_ATTRIBUTE_ADMIN = "is_admin";

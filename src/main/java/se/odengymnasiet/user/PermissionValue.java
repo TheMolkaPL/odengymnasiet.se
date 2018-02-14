@@ -1,5 +1,8 @@
 package se.odengymnasiet.user;
 
+/**
+ * Value of a permission which tells if the permission should be granted or not.
+ */
 public enum PermissionValue {
 
     ALLOW(true), DENY(false), ABSTAIN(false);

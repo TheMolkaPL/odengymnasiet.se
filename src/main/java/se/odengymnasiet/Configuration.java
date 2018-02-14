@@ -9,6 +9,10 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 
+/**
+ * Configuration of the application and the Spark server (which is
+ * {@link spark.Service}).
+ */
 public class Configuration {
 
     public static final String CONFIGURATION_FILE_PATH = "application.xml";

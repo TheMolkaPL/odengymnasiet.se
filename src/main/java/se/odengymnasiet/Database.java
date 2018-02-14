@@ -4,7 +4,10 @@ import org.slf4j.Logger;
 
 import java.util.function.Consumer;
 
-public class Database {
+/**
+ * Something that can be a database and save and manipulate the data.
+ */
+public abstract class Database {
 
     private final Application application;
     private final Logger logger;

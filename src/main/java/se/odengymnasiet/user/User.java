@@ -4,6 +4,9 @@ import org.bson.Document;
 import org.bson.types.ObjectId;
 import se.odengymnasiet.Model;
 
+/**
+ * User which can login into the admin panel.
+ */
 public class User extends Model implements Permissible {
 
     public static final String FIELD_PERSON_ID = "person_id";

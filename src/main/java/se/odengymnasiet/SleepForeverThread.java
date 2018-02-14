@@ -1,5 +1,9 @@
 package se.odengymnasiet;
 
+/**
+ * Prevention from application self shutting down. Just make this thread sleep
+ * forever...
+ */
 public class SleepForeverThread extends Thread {
 
     public SleepForeverThread() {

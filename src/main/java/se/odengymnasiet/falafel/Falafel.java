@@ -11,6 +11,17 @@ import java.time.temporal.WeekFields;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Representation of a single school lunch day. Every day is provided by its
+ * year and week number. School lunches can hold as many dishes as you want. The
+ * dishes are not sorted (because we want to have main dish first, and the
+ * vegetarian after it).
+ *
+ * You maybe wonder why this class is called after falafels. I'm not a big fan
+ * of falafels, but there is a kebab restaurant in Stockholm which is called
+ * Falafelkungen. I ate there ALL my school lunches on the food card...
+ * That's why this is called Falafel :D
+ */
 public class Falafel extends Model implements Comparable<Falafel> {
 
     public static final Falafel NULL = new NullFalafel();
@@ -69,6 +80,9 @@ public class Falafel extends Model implements Comparable<Falafel> {
         return this.day;
     }
 
+    /**
+     * Should maybe be moved to a utility class?
+     */
     public String getDayName() {
         switch (this.getDay()) {
             case MONDAY: return "måndag";
@@ -115,6 +129,31 @@ public class Falafel extends Model implements Comparable<Falafel> {
     public void setDishes(List<String> dishes) {
         Collections.sort(dishes);
         this.dishes = dishes;
+    }
+
+    public static Falafel of(int year) {
+        Falafel falafel = new Falafel();
+        falafel.setYear(year);
+        return falafel;
+    }
+
+    public static Falafel of(int year, int week) {
+        Falafel falafel = new Falafel();
+        falafel.setYear(year);
+        falafel.setWeek(week);
+        return falafel;
+    }
+
+    public static Falafel of(int year, int week, int dayOfWeek) {
+        return of(year, week, DayOfWeek.of(dayOfWeek));
+    }
+
+    public static Falafel of(int year, int week, DayOfWeek day) {
+        Falafel falafel = new Falafel();
+        falafel.setYear(year);
+        falafel.setWeek(week);
+        falafel.setDay(day);
+        return falafel;
     }
 
     @Override

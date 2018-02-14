@@ -4,6 +4,10 @@ import org.bson.types.ObjectId;
 
 import java.util.Collection;
 
+/**
+ * A repository is manipulating the data inside the provided database.
+ * @param <E> The Data Object Model class which this class manipulates on.
+ */
 public interface Repository<E extends Model> {
 
     long count();

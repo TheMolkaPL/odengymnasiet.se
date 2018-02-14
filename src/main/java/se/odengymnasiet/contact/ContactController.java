@@ -6,37 +6,28 @@ import se.odengymnasiet.Attributes;
 import se.odengymnasiet.Controller;
 import se.odengymnasiet.article.Article;
 import se.odengymnasiet.article.ArticlePaths;
-import se.odengymnasiet.article.ArticleRepository;
 import se.odengymnasiet.route.HttpRoute;
 import spark.Request;
 import spark.Response;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class ContactController extends Controller<ContactManifest> {
-
-    private final ArticleRepository articleRepository;
-    private final GroupRepository groupRepository;
-    private final PersonRepository personRepository;
 
     public ContactController(Application app,
                              ContactManifest manifest,
                              Request request,
                              Response response) {
         super(app, manifest, request, response);
-
-        this.articleRepository = manifest.getArticleRepository();
-        this.groupRepository = manifest.getGroupRepository();
-        this.personRepository = manifest.getPersonRepository();
     }
 
     @HttpRoute("/")
     public Object index() {
-        Article article = this.articleRepository
+        Article article = this.getManifest().getArticleRepository()
                 .findByPath(ArticlePaths.contact());
         if (article == null) {
             article = Article.NULL;
@@ -49,10 +40,11 @@ public class ContactController extends Controller<ContactManifest> {
 
     @HttpRoute("/staff")
     public Object staff() {
-        Map<ObjectId, Group> dbGroups = new HashMap<>();
-        this.groupRepository.findAll().forEach(group -> {
-            dbGroups.put(group.getId(), group);
-        });
+        ContactManifest manifest = this.getManifest();
+
+        Map<ObjectId, Group> dbGroups = manifest.getGroupRepository()
+                .findAll().stream()
+                .collect(Collectors.toMap(Group::getId, group -> group));
 
         Group defaultGroup = new Group() {
             @Override
@@ -72,7 +64,7 @@ public class ContactController extends Controller<ContactManifest> {
         };
 
         List<PersonGroupRelation> relations = new ArrayList<>();
-        this.personRepository.findContactable().forEach(person -> {
+        manifest.getPersonRepository().findContactable().forEach(person -> {
             person.getGroups().forEach(personGroup -> {
                 Group group = null;
                 ObjectId groupId = personGroup.getGroupId();

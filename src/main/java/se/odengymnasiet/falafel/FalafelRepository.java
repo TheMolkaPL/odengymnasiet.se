@@ -32,8 +32,8 @@ class LocalFalafelRepository extends LocalRepository<Falafel>
     @Override
     public Collection<Falafel> findAllFor(int year, int week) {
         return this.container.values().stream()
-                .filter(falafel -> falafel.getYear() == year &&
-                                   falafel.getWeek() == week)
+                .filter(falafel -> falafel.getYear() == year)
+                .filter(falafel -> falafel.getWeek() == week)
                 .collect(Collectors.toList());
     }
 }

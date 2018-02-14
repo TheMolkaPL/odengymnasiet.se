@@ -6,6 +6,9 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * Managing {@link Manifest}s.
+ */
 public class ManifestManager {
 
     private final Application application;

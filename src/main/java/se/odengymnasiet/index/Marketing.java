@@ -5,6 +5,9 @@ import org.bson.Document;
 import org.bson.types.ObjectId;
 import se.odengymnasiet.Model;
 
+/**
+ * A single marketing image displayed on the index page single a .jumbotron.
+ */
 public class Marketing extends Model {
 
     public static final Marketing NULL = new NullMarketing();

@@ -2,6 +2,10 @@ package se.odengymnasiet.user;
 
 import java.util.Objects;
 
+/**
+ * Unique permission object which requires a unique name (identifier) and an
+ * optional value.
+ */
 public class Permission {
 
     private final String name;

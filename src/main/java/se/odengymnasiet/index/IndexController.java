@@ -6,13 +6,9 @@ import se.odengymnasiet.Attributes;
 import se.odengymnasiet.Controller;
 import se.odengymnasiet.article.Article;
 import se.odengymnasiet.article.ArticlePaths;
-import se.odengymnasiet.article.ArticleRepository;
 import se.odengymnasiet.falafel.Falafel;
-import se.odengymnasiet.falafel.FalafelRepository;
 import se.odengymnasiet.openhouse.OpenHouse;
-import se.odengymnasiet.openhouse.OpenHouseRepository;
 import se.odengymnasiet.program.Program;
-import se.odengymnasiet.program.ProgramRepository;
 import se.odengymnasiet.route.HttpRoute;
 import spark.Request;
 import spark.Response;
@@ -27,29 +23,19 @@ import java.util.List;
 
 public class IndexController extends Controller<IndexManifest> {
 
-    private final ArticleRepository articleRepository;
-    private final FalafelRepository falafelRepository;
-    private final MarketingRepository marketingRepository;
-    private final OpenHouseRepository openHouseRepository;
-    private final ProgramRepository programRepository;
-
     public IndexController(Application app,
                            IndexManifest manifest,
                            Request request,
                            Response response) {
         super(app, manifest, request, response);
-
-        this.articleRepository = manifest.getArticleRepository();
-        this.falafelRepository = manifest.getFalafelRepository();
-        this.marketingRepository = manifest.getMarketingRepository();
-        this.openHouseRepository = manifest.getOpenHouseRepository();
-        this.programRepository = manifest.getProgramRepository();
     }
 
     @HttpRoute("/")
     public Object index() {
+        IndexManifest manifest = this.getManifest();
+
         Collection<Marketing> collection = new ArrayList<>(
-                this.marketingRepository.findAllDeployed());
+                manifest.getMarketingRepository().findAllDeployed());
 
         // marketing
         Marketing marketing = null;
@@ -61,12 +47,12 @@ public class IndexController extends Controller<IndexManifest> {
 
         // programs
         List<Program> programs = new ArrayList<>(
-                this.programRepository.findAllRecommended());
+                manifest.getProgramRepository().findAllRecommended());
         Collections.sort(programs);
 
         // open houses
         List<OpenHouse> openHouses = new ArrayList<>(
-                this.openHouseRepository.findAllDeployedComing());
+                manifest.getOpenHouseRepository().findAllDeployedComing());
         Collections.sort(openHouses);
 
         // falafels
@@ -74,7 +60,7 @@ public class IndexController extends Controller<IndexManifest> {
         int year = now.getYear();
         int week = now.get(Falafel.WEEK_FIELD);
         List<Falafel> falafels = new ArrayList<>(
-                this.falafelRepository.findAllFor(year, week));
+                manifest.getFalafelRepository().findAllFor(year, week));
 
         List<DayOfWeek> days = new ArrayList<>(
                 Arrays.asList(DayOfWeek.values()));
@@ -94,8 +80,6 @@ public class IndexController extends Controller<IndexManifest> {
             falafels.add(defaultValue);
         });
 
-        Collections.sort(falafels);
-
         Attributes attributes = Attributes.create()
                 .add("marketing", marketing)
                 .add("programs", programs)
@@ -106,7 +90,7 @@ public class IndexController extends Controller<IndexManifest> {
 
     @HttpRoute("/about")
     public Object about() {
-        Article article = this.articleRepository
+        Article article = this.getManifest().getArticleRepository()
                 .findByPath(ArticlePaths.about());
         if (article == null) {
             article = Article.NULL;

@@ -3,6 +3,7 @@ package se.odengymnasiet.admin;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class TopicNagivationItem implements Comparable<TopicNagivationItem> {
 
@@ -31,8 +32,17 @@ public class TopicNagivationItem implements Comparable<TopicNagivationItem> {
         return this.active;
     }
 
-    public static List<TopicNagivationItem> list(List<Topic> topics,
-                                                 String now) {
+    public static List<TopicNagivationItem> listHolders(
+            List<TopicHolder> topics, String now) {
+        List<Topic> items = topics.stream()
+                .map(TopicHolder::getTopic)
+                .collect(Collectors.toList());
+
+        return list(items, now);
+    }
+
+    public static List<TopicNagivationItem> list(
+            List<Topic> topics, String now) {
         List<TopicNagivationItem> items = new ArrayList<>();
         topics.forEach(topic -> {
             boolean active = topic.getPath().equals(now);

@@ -9,6 +9,9 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
 
+/**
+ * Representation of an single open house event.
+ */
 public class OpenHouse extends Model implements Comparable<OpenHouse> {
 
     public static final String FIELD_START = "start";

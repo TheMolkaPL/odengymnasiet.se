@@ -4,6 +4,10 @@ import org.bson.Document;
 import org.bson.types.ObjectId;
 import se.odengymnasiet.Model;
 
+/**
+ * Simple URL references to different services (eg. email, SchoolSoft). The
+ * references are currently displayed on the navbar and on the /students page.
+ */
 public class StudentService extends Model
                             implements Comparable<StudentService> {
 

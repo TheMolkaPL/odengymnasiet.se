@@ -10,6 +10,10 @@ import org.bson.codecs.EncoderContext;
 import java.time.Instant;
 import java.util.Date;
 
+/**
+ * Converting {@link Date} (which the official MongoDB's Java Driver) uses to
+ * more usable and friendly new Java 8's {@link Instant}s.
+ */
 public class InstantCodec implements Codec<Instant> {
 
     private final DateCodec dateCodec;

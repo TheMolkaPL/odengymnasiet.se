@@ -5,6 +5,9 @@ import spark.RouteImpl;
 import spark.Service;
 import spark.route.HttpMethod;
 
+/**
+ * All HTTP verbs.
+ */
 public enum RequestMethod {
 
     GET("GET", HttpMethod.get),

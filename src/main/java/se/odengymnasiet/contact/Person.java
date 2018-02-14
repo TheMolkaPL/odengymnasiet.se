@@ -7,6 +7,10 @@ import se.odengymnasiet.Model;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * A single person working in the school. The person can be contacted and is
+ * displayed on the /contact/staff page.
+ */
 public class Person extends Model implements Comparable<Person> {
 
     public static final String FIELD_FIRST_NAME = "first_name";

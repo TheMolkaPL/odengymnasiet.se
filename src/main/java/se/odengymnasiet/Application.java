@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import se.odengymnasiet.admin.DefaultAdminManifest;
 import se.odengymnasiet.admin.TopicsManifest;
+import se.odengymnasiet.article.ArticleAdminManifest;
 import se.odengymnasiet.contact.ContactManifest;
 import se.odengymnasiet.index.IndexManifest;
 import se.odengymnasiet.openhouse.OpenHouseManifest;
@@ -30,6 +31,9 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * The website application main class.
+ */
 public final class Application implements SparkApplication {
 
     public static void main(String[] args) {
@@ -354,6 +358,14 @@ public final class Application implements SparkApplication {
                 ProgramsManifest.class,
                 StudentsManifest.class,
                 TopicsManifest.class
+        ).forEach(manifest -> this.getManifests().registerManifest(manifest));
+
+        this.registerTopicManifests();
+    }
+
+    private void registerTopicManifests() {
+        Arrays.asList(
+                ArticleAdminManifest.class
         ).forEach(manifest -> this.getManifests().registerManifest(manifest));
     }
 }

@@ -13,6 +13,12 @@ import java.util.Collection;
 
 import static com.mongodb.client.model.Filters.*;
 
+/**
+ * Class to support simple collection manipulation of the data inside a
+ * MongoDB's collection. A very simple wrapper between {@link Repository}
+ * and {@link MongoCollection}.
+ * @param <E> Data Object Model of this repository.
+ */
 public abstract class MongoRepository<E extends Model>
         implements Repository<E> {
 

@@ -1,5 +1,8 @@
 package se.odengymnasiet.user;
 
+/**
+ * Something that can hold permissions.
+ */
 public interface Permissible {
 
     default boolean hasPermission(Permission permission) {

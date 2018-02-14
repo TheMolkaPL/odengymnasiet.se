@@ -2,6 +2,9 @@ package se.odengymnasiet;
 
 import java.util.HashMap;
 
+/**
+ * Model information provided from a {@link Controller} to a view resource.
+ */
 public class Attributes extends HashMap<String, Object> {
 
     protected Attributes() {

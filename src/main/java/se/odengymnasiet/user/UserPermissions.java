@@ -8,6 +8,9 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * Demonstration of all {@link User}s permissions.
+ */
 public class UserPermissions implements DocumentSerializable, Permissible,
         Iterable<Map.Entry<Permission, PermissionValue>> {
 

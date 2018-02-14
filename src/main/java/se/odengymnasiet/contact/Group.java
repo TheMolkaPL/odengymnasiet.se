@@ -4,6 +4,12 @@ import org.bson.Document;
 import org.bson.types.ObjectId;
 import se.odengymnasiet.Model;
 
+/**
+ * A {@link Person} group which can hold as many {@link Person}s as you want.
+ * Every group have its name, priority (so it is sorted property on the
+ * /contact/staff page). The group must have its roleName, so we know what the
+ * people work with.
+ */
 public class Group extends Model implements Comparable<Group> {
 
     public static final String FIELD_NAME = "name";

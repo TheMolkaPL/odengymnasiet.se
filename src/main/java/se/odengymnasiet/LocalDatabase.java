@@ -14,6 +14,10 @@ import se.odengymnasiet.user.UserRepository;
 import java.util.Arrays;
 import java.util.function.Consumer;
 
+/**
+ * This is the simplest implementation of the {@link Database} object. It just
+ * saves the information in-memory which is lost after the request is handled.
+ */
 public class LocalDatabase extends Database {
 
     public LocalDatabase(Application app, Logger logger) {

@@ -3,6 +3,9 @@ package se.odengymnasiet.program;
 import org.bson.Document;
 import se.odengymnasiet.DocumentSerializable;
 
+/**
+ * A file assets attached to a program (eg. a point schema PDF file).
+ */
 public class ProgramFile implements Comparable<ProgramFile>,
                                     DocumentSerializable {
 

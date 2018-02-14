@@ -1,9 +1,8 @@
 package se.odengymnasiet.admin;
 
 import org.apache.commons.lang3.StringUtils;
-import se.odengymnasiet.Model;
 
-public class Topic extends Model implements Comparable<Topic> {
+public class Topic implements Comparable<Topic> {
 
     private final String path;
     private final String name;

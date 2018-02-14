@@ -2,11 +2,18 @@ package se.odengymnasiet.article;
 
 import org.apache.commons.lang3.StringUtils;
 
+/**
+ * Hardcoded paths to hardcoded articles on the website.
+ */
 public class ArticlePaths {
 
+    // /about
     private static final String ABOUT = "about";
+    // /contact and /open-house/{id}
     private static final String CONTACT = "contact";
+    // all programs related articles
     private static final String PROGRAMS = "programs";
+    // all students related articles
     private static final String STUDENTS = "students";
 
     private ArticlePaths() {

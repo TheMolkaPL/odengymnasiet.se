@@ -5,7 +5,6 @@ import se.odengymnasiet.Attributes;
 import se.odengymnasiet.Controller;
 import se.odengymnasiet.article.Article;
 import se.odengymnasiet.article.ArticlePaths;
-import se.odengymnasiet.article.ArticleRepository;
 import se.odengymnasiet.article.NavigationItem;
 import se.odengymnasiet.route.HttpRoute;
 import spark.Request;
@@ -16,38 +15,35 @@ import java.util.List;
 
 public class StudentsController extends Controller<StudentsManifest> {
 
-    private final ArticleRepository articleRepository;
-    private final StudentServiceRepository studentServiceRepository;
-
     public StudentsController(Application app,
                               StudentsManifest manifest,
                               Request request,
                               Response response) {
         super(app, manifest, request, response);
-
-        this.articleRepository = manifest.getArticleRepository();
-        this.studentServiceRepository = manifest.getStudentServiceRepository();
     }
 
     @HttpRoute("/")
     public Object index() {
+        StudentsManifest manifest = this.getManifest();
+
         // article
         String articlePath = ArticlePaths.students() + "/";
-        Article article = this.articleRepository.findByPath(articlePath);
+        Article article = manifest.getArticleRepository()
+                .findByPath(articlePath);
         if (article == null) {
             article = Article.NULL;
         }
 
         // pages
         List<NavigationItem> pages = NavigationItem.list(
-                this.articleRepository,
+                manifest.getArticleRepository(),
                 articlePath,
                 articlePath,
                 "För elever");
 
         // student services
         List<StudentService> studentServices = new ArrayList<>(
-                this.studentServiceRepository.findAll());
+                manifest.getStudentServiceRepository().findAll());
 
         Attributes attributes = Attributes.create()
                 .add("article", article)
@@ -58,11 +54,14 @@ public class StudentsController extends Controller<StudentsManifest> {
 
     @HttpRoute("/:page")
     public Object page() {
+        StudentsManifest manifest = this.getManifest();
+
         String path = this.getRequest().params(":page");
 
         // article
         String articlePath = ArticlePaths.students(path.toLowerCase());
-        Article article = this.articleRepository.findByPath(articlePath);
+        Article article = manifest.getArticleRepository()
+                .findByPath(articlePath);
         if (article == null) {
             this.getResponse().status(404);
             return this.getResponse().body();
@@ -70,14 +69,14 @@ public class StudentsController extends Controller<StudentsManifest> {
 
         // pages
         List<NavigationItem> pages = NavigationItem.list(
-                this.articleRepository,
+                manifest.getArticleRepository(),
                 ArticlePaths.students() + "/",
                 articlePath,
                 "För elever");
 
         // student services
         List<StudentService> studentServices = new ArrayList<>(
-                this.studentServiceRepository.findAll());
+                manifest.getStudentServiceRepository().findAll());
 
         Attributes attributes = Attributes.create()
                 .add("article", article)

@@ -5,6 +5,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Maybe not the best designed class... It stores information about different
+ * pages with articles.
+ */
 public class NavigationItem implements Comparable<NavigationItem> {
 
     private final Article article;

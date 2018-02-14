@@ -1,5 +1,9 @@
 package se.odengymnasiet;
 
+/**
+ * Handling error pages. Currently only HTTP 404 (not found) and HTTP 500
+ * (internal server error) are supported.
+ */
 public class ErrorPage {
 
     public static final String VIEW_NAME = "error";

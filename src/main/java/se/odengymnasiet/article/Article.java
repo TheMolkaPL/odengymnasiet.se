@@ -4,6 +4,10 @@ import org.bson.Document;
 import org.bson.types.ObjectId;
 import se.odengymnasiet.Model;
 
+/**
+ * Simple text holder which can be renderer as a side information or a page
+ * content.
+ */
 public class Article extends Model implements Comparable<Article> {
 
     public static final Article NULL = new NullArticle();

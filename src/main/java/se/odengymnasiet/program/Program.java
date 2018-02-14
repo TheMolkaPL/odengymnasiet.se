@@ -9,6 +9,9 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Representation of a education program in this school.
+ */
 public class Program extends Model implements Comparable<Program> {
 
     public static final String FIELD_TITLE = "title";
