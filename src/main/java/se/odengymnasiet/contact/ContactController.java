@@ -84,14 +84,14 @@ public class ContactController extends Controller<ContactManifest> {
         List<GroupView> groups = new ArrayList<>();
         relations.forEach(relation -> {
             Group group = relation.getGroup();
-            if (!groups.stream().anyMatch(view -> view.group.equals(group))) {
+            if (groups.stream().noneMatch(view -> view.group.equals(group))) {
                 groups.add(new GroupView(group));
             }
 
-            GroupView view = groups.stream()
+            groups.stream()
                     .filter(groupView -> groupView.group.equals(group))
-                    .findAny().get();
-            view.getPersons().add(relation);
+                    .findAny()
+                    .ifPresent(view -> view.getPersons().add(relation));
         });
 
         Collections.sort(groups);
@@ -145,6 +145,11 @@ public class ContactController extends Controller<ContactManifest> {
 
         @Override
         public int compareTo(GroupView o) {
+            int priority = this.group.compareTo(o.group);
+            if (priority != 0) {
+                return priority;
+            }
+
             String thisName = this.getGroup().getName();
             String thatName = o.getGroup().getName();
 

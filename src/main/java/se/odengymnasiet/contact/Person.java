@@ -47,8 +47,8 @@ public class Person extends Model implements Comparable<Person> {
             return compare;
         }
 
-        return (this.getLastName() + this.getFirstName())
-                .compareToIgnoreCase(o.getLastName() + o.getFirstName());
+        return (this.getFirstName() + " " + this.getLastName())
+                .compareToIgnoreCase(o.getFirstName() + " " + o.getLastName());
     }
 
     public String getFirstName() {

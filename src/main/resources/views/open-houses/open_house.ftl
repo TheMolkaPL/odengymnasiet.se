@@ -43,7 +43,7 @@
                 <div class="card border-light" style="height: 128px;">
                     <div class="card-body">
                         <address>
-                            <strong>Odenplansgymnasiets Skol If</strong><br>
+                            <strong>Odengymnasiet</strong><br>
                             Instrumentvägen 31<br>
                             126 53 Hägersten
                         </address>

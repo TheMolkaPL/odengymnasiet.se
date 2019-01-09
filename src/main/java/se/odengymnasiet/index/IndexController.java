@@ -19,7 +19,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.function.ToIntFunction;
 
 public class IndexController extends Controller<IndexManifest> {
 
@@ -79,6 +81,7 @@ public class IndexController extends Controller<IndexManifest> {
 
             falafels.add(defaultValue);
         });
+        falafels.sort(Comparator.naturalOrder());
 
         Attributes attributes = Attributes.create()
                 .add("marketing", marketing)

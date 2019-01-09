@@ -9,7 +9,7 @@
 
             <div class="col-md-4">
                 <address style="margin-bottom: 5px;">
-                    <strong>Odenplansgymnasiets Skol If</strong><br>
+                    <strong>Odengymnasiet</strong><br>
                     Instrumentvägen 31<br>
                     126 53 Hägersten
                 </address>
