@@ -59,7 +59,7 @@ public class SQLArticleRepository extends SQLRepository<Article>
         try (Connection connection = this.getDataSource().getConnection()) {
             PreparedStatement statement = this.createStatement(connection,
                     "SELECT * FROM %s WHERE path LIKE ?;");
-            statement.setString(1, startingPath);
+            statement.setString(1, startingPath + "%");
 
             ResultSet resultSet = statement.executeQuery();
 
