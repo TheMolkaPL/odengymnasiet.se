@@ -67,6 +67,8 @@
     </properties>
 
     <build>
+        <finalName>odengymnasiet-website</finalName>
+
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
