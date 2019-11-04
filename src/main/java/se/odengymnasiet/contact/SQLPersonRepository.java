@@ -16,6 +16,7 @@
 
 package se.odengymnasiet.contact;
 
+import org.bson.types.ObjectId;
 import se.odengymnasiet.RepositoryHandler;
 import se.odengymnasiet.sql.SQLRepository;
 import se.odengymnasiet.sql.SQLTable;
@@ -51,7 +52,7 @@ public class SQLPersonRepository extends SQLRepository<Person>
         person.setLastName(resultSet.getString("last_name"));
         person.setContactable(resultSet.getBoolean("contactable"));
         person.setPriority(resultSet.getInt("priority"));
-        person.setGroups(Collections.emptyList()); // TODO groups
+        person.setGroups(this.findGroups(resultSet.getInt("id")));
         person.setEmail(resultSet.getString("email"));
         person.setTelephone(resultSet.getString("telephone"));
         return person;
@@ -77,5 +78,39 @@ public class SQLPersonRepository extends SQLRepository<Person>
         }
 
         return Collections.emptyList();
+    }
+
+    private List<Person.PersonGroup> findGroups(int personId) {
+        try (Connection connection = this.getDataSource().getConnection()) {
+            PreparedStatement statement = connection.prepareStatement(
+                    "SELECT * " +
+                    "FROM person_groups " +
+                    "INNER JOIN groups " +
+                    "ON person_groups.group_id = groups.id " +
+                    "WHERE person_groups.person_id=?;");
+            statement.setInt(1, personId);
+
+            ResultSet resultSet = statement.executeQuery();
+
+            List<Person.PersonGroup> results = new ArrayList<>();
+            while (resultSet.next()) {
+                results.add(this.deserializeGroup(resultSet));
+            }
+
+            return results;
+        } catch (SQLException e) {
+            this.catchException(e);
+        }
+
+        return Collections.emptyList();
+    }
+
+    private Person.PersonGroup deserializeGroup(ResultSet resultSet)
+            throws SQLException {
+        Person.PersonGroup group = new Person.PersonGroup();
+        group.setGroupId(new ObjectId(resultSet.getString("groups.object_id")));
+        group.setRole(resultSet.getString("person_groups.role"));
+        group.setFocused(resultSet.getBoolean("person_groups.focused"));
+        return group;
     }
 }

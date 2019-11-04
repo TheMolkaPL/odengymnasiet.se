@@ -16,6 +16,7 @@
 
 package se.odengymnasiet.openhouse;
 
+import org.bson.types.ObjectId;
 import se.odengymnasiet.RepositoryHandler;
 import se.odengymnasiet.sql.SQLRepository;
 import se.odengymnasiet.sql.SQLTable;
@@ -54,7 +55,7 @@ public class SQLOpenHouseRepository extends SQLRepository<OpenHouse>
         openHouse.setStart(resultSet.getTimestamp("start").toInstant());
         openHouse.setEnd(end == null ? null : end.toInstant());
         openHouse.setDescription(resultSet.getString("description"));
-        openHouse.setPrograms(Collections.emptyList()); // TODO programs
+        openHouse.setPrograms(this.findPrograms(resultSet.getInt("id")));
         openHouse.setDeployed(resultSet.getBoolean("deployed"));
         return openHouse;
     }
@@ -116,6 +117,32 @@ public class SQLOpenHouseRepository extends SQLRepository<OpenHouse>
             List<OpenHouse> results = new ArrayList<>();
             while (resultSet.next()) {
                 results.add(this.deserialize(resultSet));
+            }
+
+            return results;
+        } catch (SQLException e) {
+            this.catchException(e);
+        }
+
+        return Collections.emptyList();
+    }
+
+    private List<ObjectId> findPrograms(int openHouseId) {
+        try (Connection connection = this.getDataSource().getConnection()) {
+            PreparedStatement statement = connection.prepareStatement(
+                    "SELECT object_id " +
+                    "FROM programs " +
+                    "INNER JOIN open_house_programs " +
+                    "ON programs.id = open_house_programs.program_id " +
+                    "WHERE open_house_programs.open_house_id=?;");
+            statement.setInt(1, openHouseId);
+
+            ResultSet resultSet = statement.executeQuery();
+
+            List<ObjectId> results = new ArrayList<>();
+            while (resultSet.next()) {
+                String objectId = resultSet.getString("programs.object_id");
+                results.add(new ObjectId(objectId));
             }
 
             return results;

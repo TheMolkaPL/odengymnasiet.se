@@ -49,7 +49,7 @@ public class SQLProgramRepository extends SQLRepository<Program>
         Program program = super.deserialize(resultSet);
         program.setTitle(resultSet.getString("title"));
         program.setSubtitle(resultSet.getString("subtitle"));
-        program.setSubtitle(resultSet.getString("path"));
+        program.setPath(resultSet.getString("path"));
         program.setIcon(resultSet.getString("icon"));
         program.setPriority(resultSet.getInt("priority"));
         program.setMarketing(resultSet.getString("marketing"));
@@ -123,7 +123,8 @@ public class SQLProgramRepository extends SQLRepository<Program>
 
     private List<ProgramFile> findFiles(int programId) {
         try (Connection connection = this.getDataSource().getConnection()) {
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM program_files WHERE program_id=?;");
+            PreparedStatement statement = connection.prepareStatement(
+                    "SELECT * FROM program_files WHERE program_id=?;");
             statement.setInt(1, programId);
 
             ResultSet resultSet = statement.executeQuery();

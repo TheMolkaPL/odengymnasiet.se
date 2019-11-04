@@ -79,7 +79,8 @@ public class SQLFalafelRepository extends SQLRepository<Falafel>
 
     private List<String> findDishes(int falafelId) {
         try (Connection connection = this.getDataSource().getConnection()) {
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM menu_dishes WHERE menu_id=?;");
+            PreparedStatement statement = connection.prepareStatement(
+                    "SELECT * FROM menu_dishes WHERE menu_id=?;");
             statement.setInt(1, falafelId);
 
             ResultSet resultSet = statement.executeQuery();
